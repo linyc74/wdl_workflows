@@ -120,7 +120,7 @@ task PythonVariantFilter {
     command <<<
         set -e -o pipefail
         zcat ~{inFileVcfGz} > in.vcf
-        python /usr/local/seqslab/variant filtering \
+        python /usr/local/seqslab/omic variant-filtering \
         --input-vcf in.vcf \
         --output-vcf ~{sampleName}_Pyfiltered.vcf \
         --variant-flagging-criteria ~{flaggingCriteria}  \

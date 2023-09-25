@@ -62,7 +62,7 @@ task PythonVariantPicking {
  
     command <<<
         set -e -o pipefail
-        python /usr/local/seqslab/variant picking \
+        python /usr/local/seqslab/omic variant-picking \
         --ref-fa ~{refFa} \
         --somatic-sniper ~{inFileVcfSS} \
         --muse ~{inFileVcfMU} \
