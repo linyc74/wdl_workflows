@@ -111,8 +111,8 @@ task Mpileup {
 task PythonVariantFilter {
     input {
         File inFileVcfGz
-        String flaggingCriteria = "\"LOW_DP: DP<20, HIGH_MQ: MQ>=30\""
-        String removalFlags = "panel_of_normal,LOW_DP"
+        String flaggingCriteria = "\"low_depth: DP <= 10\""
+        String removalFlags = "map_qual,panel_of_normal,base_qual,strand_bias,multiallelic,orientation,contamination,clustered_events,MQ40,QD2,SOR3,MQRankSum-12.5,FS60,FS200,ReadPosRankSum-8,ReadPosRankSum-20,Bias,q22.5,Q10,Cluster0bp"
         String sampleName
         String callerName
     }
