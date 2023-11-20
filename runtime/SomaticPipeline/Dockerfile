@@ -29,7 +29,7 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # Install R
 RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc \
     && add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" \
-    && apt install --no-install-recommends r-base=4.2.2.20221110-1.2204.0 -y
+    && apt install --no-install-recommends r-base -y
 
 # Install FastQC v0.11.9
 RUN cd /usr/local/seqslab \
@@ -127,9 +127,9 @@ RUN cd /usr/local/seqslab \
 
 # Install NYCU python CLI tool
 RUN cd /usr/local/seqslab \
-    && wget https://github.com/linyc74/omic/archive/refs/tags/v1.0.0.zip
-    && unzip omic-1.0.0.zip \
-    && rm omic-1.0.0.zip \
+    && wget https://github.com/linyc74/omic/archive/refs/tags/v1.0.0.zip \
+    && unzip v1.0.0.zip \
+    && rm v1.0.0.zip \
     && mv omic-1.0.0 omic
 
 
