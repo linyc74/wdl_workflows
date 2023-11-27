@@ -1,4 +1,4 @@
-FROM atgenomix.azurecr.io/0_runtime/seqslab_runtime-1.5_ubuntu-22.04_java11:latest
+FROM ghcr.io/atgenomix/runtime/base:1.5_22.04
 
 #### Basic image utilities
 RUN apt-get update && \
@@ -13,6 +13,8 @@ RUN apt-get update && \
     libcurl4-gnutls-dev \
     libssl-dev \
     libncurses5-dev \
+    libc6-dev \
+    libntirpc-dev \
     git \
     unzip \
     cmake
