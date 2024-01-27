@@ -64,15 +64,15 @@ task PythonVariantPicking {
         set -e -o pipefail
         python /usr/local/seqslab/omic variant-picking \
         --ref-fa ~{refFa} \
-        --somatic-sniper ~{inFileVcfSS} \
+        --somatic-sniper None \
         --muse ~{inFileVcfMU} \
         --mutect2 ~{inFileVcfM2} \
         --lofreq ~{inFileVcfLF} \
-        --vardict ~{inFileVcfVD} \
-        --varscan ~{infileVcfVS} \
+        --vardict None \
+        --varscan None \
         --output-vcf ~{sampleName}_picked.vcf \
-        --min-snv-caller 4 \
-        --min-indel-callers 2
+        --min-snv-caller 1 \
+        --min-indel-callers 1
         bgzip \
         --stdout ~{sampleName}_picked.vcf > ~{sampleName}_picked.vcf.gz
         tabix \
