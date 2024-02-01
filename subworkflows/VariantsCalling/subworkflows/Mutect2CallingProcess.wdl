@@ -61,7 +61,7 @@ workflow Mutect2CallingProcess {
             sampleName = sampleName     
     }
 
-    call general.PythonVariantFilter as filter {
+    call general.VariantFiltering as filter {
         input:
             inFileVcfGz = FilterMutectCalls.outFileVcfGz,
             sampleName = sampleName,
@@ -71,8 +71,8 @@ workflow Mutect2CallingProcess {
     output {
         File outFileVcfGz = FilterMutectCalls.outFileVcfGz
         File outFileVcfIndex = FilterMutectCalls.outFileVcfIndex
-        File outFilePythonFilterVcfGz = filter.outFileVcfGz
-        File outFilePythonFilterVcfIndex = filter.outFileVcfIndex
+        File outFileFilteredVcfGz = filter.outFileVcfGz
+        File outFileFilteredVcfIndex = filter.outFileVcfIndex
     }
 }
 

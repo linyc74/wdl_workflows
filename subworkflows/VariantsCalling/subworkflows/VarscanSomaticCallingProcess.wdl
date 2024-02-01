@@ -2,9 +2,7 @@ version 1.0
 
 import "../../GeneralTask.wdl" as general
 
-# WORKFLOW DEFINITION
 
-# Generate a VarScan processed ready vcf
 workflow VarscanSomaticCallingProcess {
     input {
         File inFileTumorBam
@@ -52,7 +50,7 @@ workflow VarscanSomaticCallingProcess {
             callerName = "varscan"
     }
 
-    call general.PythonVariantFilter as filter {
+    call general.VariantFiltering as filter {
         input:
             inFileVcfGz = concat.outFileVcfGz,
             sampleName = sampleName,
@@ -62,15 +60,12 @@ workflow VarscanSomaticCallingProcess {
     output {
         File outFileVcfGz = concat.outFileVcfGz
         File outFileVcfIndex = concat.outFileVcfIndex
-        File outFilePythonFilterVcfGz = filter.outFileVcfGz
-        File outFilePythonFilterVcfIndex = filter.outFileVcfIndex
+        File outFileFilteredVcfGz = filter.outFileVcfGz
+        File outFileFilteredVcfIndex = filter.outFileVcfIndex
     }
 }
 
 
-# TASK DEFINITIONS
-
-# Calling somatic variants using VarScan
 task VarscanSomatic {
     input {
         File inFileTumorPileup

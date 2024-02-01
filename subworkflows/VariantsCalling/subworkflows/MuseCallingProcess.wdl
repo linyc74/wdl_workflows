@@ -33,7 +33,7 @@ workflow MuseCallingProcess {
             sampleName = sampleName
     }
 
-    call general.PythonVariantFilter as filter {
+    call general.VariantFiltering as filter {
         input:
             inFileVcfGz = MuseSump.outFileVcfGz,
             sampleName = sampleName,
@@ -43,8 +43,8 @@ workflow MuseCallingProcess {
     output {
         File outFileVcfGz = MuseSump.outFileVcfGz
         File outFileVcfIndex = MuseSump.outFileVcfIndex
-        File outFilePythonFilterVcfGz = filter.outFileVcfGz
-        File outFilePythonFilterVcfIndex = filter.outFileVcfIndex
+        File outFileFilteredVcfGz = filter.outFileVcfGz
+        File outFileFilteredVcfIndex = filter.outFileVcfIndex
     }
 }
 

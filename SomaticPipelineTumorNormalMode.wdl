@@ -5,9 +5,7 @@ import "subworkflows/Mapping/TNpairedMapping.wdl" as mapper
 import "subworkflows/VariantsCalling/TNpairedVariantsCalling.wdl" as caller
 import "subworkflows/PickAndAnnotate.wdl" as annotate
 
-# WORKFLOW DEFINITION
 
-# NYCU Dentistry somatic pipeline in Tumor-Normal paired mode
 workflow SomaticPipelineTumorNormalMode {
     input {
         Array[Array[File]] inFileTumorFastqs
@@ -104,12 +102,12 @@ workflow SomaticPipelineTumorNormalMode {
 
         call annotate.PickAndAnnotate as vcfAnnotate {
             input:
-                inFileVcfSS = variantCalling.outFileBamsomaticsniperPyVcfGz,
-                inFileVcfMU = variantCalling.outFileMusePyVcfGz,
-                inFileVcfM2 = variantCalling.outFileMutect2PyVcfGz,
-                inFileVcfLF = variantCalling.outFileLofreqPyVcfGz,
-                inFileVcfVD = variantCalling.outFileVardictPyVcfGz,
-                infileVcfVS = variantCalling.outFileVarscanPyVcfGz,
+                inFileVcfSS = variantCalling.outFileBamsomaticsniperFilteredVcfGz,
+                inFileVcfMU = variantCalling.outFileMuseFilteredVcfGz,
+                inFileVcfM2 = variantCalling.outFileMutect2FilteredVcfGz,
+                inFileVcfLF = variantCalling.outFileLofreqFilteredVcfGz,
+                inFileVcfVD = variantCalling.outFileVardictFilteredVcfGz,  ###
+                infileVcfVS = variantCalling.outFileVarscanFilteredVcfGz,
                 inDirPCGRref = inDirPCGRref,
                 refFa = refFa,
                 sampleName = fON
@@ -129,18 +127,18 @@ workflow SomaticPipelineTumorNormalMode {
         Array[File] outFileNormalSortedRawBam = TNmapping.outFileNormalSortedRawBam
         Array[File] outFileStatsTumorBam = tumorBamStats.outFileBamStats
         Array[File] outFileStatsNormalBam = normalBamStats.outFileBamStats
-        Array[File] outFileBamsomaticsniperPyVcfGz = variantCalling.outFileBamsomaticsniperPyVcfGz
-        Array[File] outFileBamsomaticsniperPyVcfIndex = variantCalling.outFileBamsomaticsniperPyVcfIndex
-        Array[File] outFileLofreqPyVcfGz = variantCalling.outFileLofreqPyVcfGz
-        Array[File] outFileLofreqPyVcfIndex = variantCalling.outFileLofreqPyVcfIndex
-        Array[File] outFileMusePyVcfGz = variantCalling.outFileMusePyVcfGz
-        Array[File] outFileMusePyVcfIndex = variantCalling.outFileMusePyVcfIndex
-        Array[File] outFileMutect2PyVcfGz = variantCalling.outFileMutect2PyVcfGz
-        Array[File] outFileMutect2PyVcfIndex = variantCalling.outFileMutect2PyVcfIndex
-        Array[File] outFileVardictPyVcfGz = variantCalling.outFileVardictPyVcfGz
-        Array[File] outFileVardictPyVcfIndex = variantCalling.outFileVardictPyVcfIndex
-        Array[File] outFileVarscanPyVcfGz = variantCalling.outFileVarscanPyVcfGz
-        Array[File] outFileVarscanPyVcfIndex = variantCalling.outFileVarscanPyVcfIndex
+        Array[File] outFileBamsomaticsniperFilteredVcfGz = variantCalling.outFileBamsomaticsniperFilteredVcfGz
+        Array[File] outFileBamsomaticsniperFilteredVcfIndex = variantCalling.outFileBamsomaticsniperFilteredVcfIndex
+        Array[File] outFileLofreqFilteredVcfGz = variantCalling.outFileLofreqFilteredVcfGz
+        Array[File] outFileLofreqFilteredVcfIndex = variantCalling.outFileLofreqFilteredVcfIndex
+        Array[File] outFileMuseFilteredVcfGz = variantCalling.outFileMuseFilteredVcfGz
+        Array[File] outFileMuseFilteredVcfIndex = variantCalling.outFileMuseFilteredVcfIndex
+        Array[File] outFileMutect2FilteredVcfGz = variantCalling.outFileMutect2FilteredVcfGz
+        Array[File] outFileMutect2FilteredVcfIndex = variantCalling.outFileMutect2FilteredVcfIndex
+        Array[File] outFileVardictFilteredVcfGz = variantCalling.outFileVardictFilteredVcfGz
+        Array[File] outFileVardictFilteredVcfIndex = variantCalling.outFileVardictFilteredVcfIndex
+        Array[File] outFileVarscanFilteredVcfGz = variantCalling.outFileVarscanFilteredVcfGz
+        Array[File] outFileVarscanFilteredVcfIndex = variantCalling.outFileVarscanFilteredVcfIndex
         Array[File] outFileBamsomaticsniperVcfGz = variantCalling.outFileBamsomaticsniperVcfGz
         Array[File] outFileBamsomaticsniperVcfIndex = variantCalling.outFileBamsomaticsniperVcfIndex
         Array[File] outFileLofreqVcfGz = variantCalling.outFileLofreqVcfGz

@@ -1,8 +1,6 @@
 version 1.0
 
-# TASK DEFINITIONS
 
-# Generate a comprehensive statistics report from bam file using samtools
 task BamStats {
     input {
         File inFileBam
@@ -23,7 +21,7 @@ task BamStats {
     }
 }
 
-# Concatenate SNV.vcf and INDEL.vcf using bcftools
+
 task Concat {
     input {
         File inFileSnvVcf
@@ -56,7 +54,7 @@ task Concat {
     }
 }
 
-# Generate FastQC report for both fastq_R1 and fastq_R2
+
 task FastQC {
     input {
         File inFileFastqR1
@@ -79,7 +77,7 @@ task FastQC {
     }
 }
 
-# Generate text pileup output for a bam file using samtools
+
 task Mpileup {
     input {
         File inFileBam
@@ -107,8 +105,8 @@ task Mpileup {
     }
 }
 
-# Generate a filtered vcf using the self maintained python code
-task PythonVariantFilter {
+
+task VariantFiltering {
     input {
         File inFileVcfGz
         String flaggingCriteria = "\"low_depth: DP <= 10\""

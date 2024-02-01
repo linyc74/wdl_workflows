@@ -7,9 +7,7 @@ import "subworkflows/Mutect2CallingProcess.wdl" as mutect2Process
 import "subworkflows/VardictPairedCallingProcess.wdl" as vardictProcess
 import "subworkflows/VarscanSomaticCallingProcess.wdl" as varscanProcess
 
-# WORKFLOW DEFINITION
 
-# Call variants using multiple caller with tumor normal paired mode
 workflow TNpairedVariantsCalling {
     input {
         File inFileTumorBam
@@ -111,18 +109,6 @@ workflow TNpairedVariantsCalling {
     }
  
     output {
-        File outFileBamsomaticsniperPyVcfGz = bamsomaticsniper.outFilePythonFilterVcfGz
-        File outFileBamsomaticsniperPyVcfIndex = bamsomaticsniper.outFilePythonFilterVcfIndex
-        File outFileLofreqPyVcfGz = lofreq.outFilePythonFilterVcfGz
-        File outFileLofreqPyVcfIndex = lofreq.outFilePythonFilterVcfIndex
-        File outFileMusePyVcfGz = muse.outFilePythonFilterVcfGz
-        File outFileMusePyVcfIndex = muse.outFilePythonFilterVcfIndex
-        File outFileMutect2PyVcfGz = mutect2.outFilePythonFilterVcfGz
-        File outFileMutect2PyVcfIndex = mutect2.outFilePythonFilterVcfIndex
-        File outFileVardictPyVcfGz = vardict.outFilePythonFilterVcfGz
-        File outFileVardictPyVcfIndex = vardict.outFilePythonFilterVcfIndex
-        File outFileVarscanPyVcfGz = varscan.outFilePythonFilterVcfGz
-        File outFileVarscanPyVcfIndex = varscan.outFilePythonFilterVcfIndex
         File outFileBamsomaticsniperVcfGz = bamsomaticsniper.outFileVcfGz
         File outFileBamsomaticsniperVcfIndex = bamsomaticsniper.outFileVcfIndex
         File outFileLofreqVcfGz = lofreq.outFileVcfGz
@@ -135,5 +121,18 @@ workflow TNpairedVariantsCalling {
         File outFileVardictVcfIndex = vardict.outFileVcfIndex
         File outFileVarscanVcfGz = varscan.outFileVcfGz
         File outFileVarscanVcfIndex = varscan.outFileVcfIndex
+
+        File outFileBamsomaticsniperFilteredVcfGz = bamsomaticsniper.outFileFilteredVcfGz
+        File outFileBamsomaticsniperFilteredVcfIndex = bamsomaticsniper.outFileFilteredVcfIndex
+        File outFileLofreqFilteredVcfGz = lofreq.outFileFilteredVcfGz
+        File outFileLofreqFilteredVcfIndex = lofreq.outFileFilteredVcfIndex
+        File outFileMuseFilteredVcfGz = muse.outFileFilteredVcfGz
+        File outFileMuseFilteredVcfIndex = muse.outFileFilteredVcfIndex
+        File outFileMutect2FilteredVcfGz = mutect2.outFileFilteredVcfGz
+        File outFileMutect2FilteredVcfIndex = mutect2.outFileFilteredVcfIndex
+        File outFileVardictFilteredVcfGz = vardict.outFileFilteredVcfGz
+        File outFileVardictFilteredVcfIndex = vardict.outFileFilteredVcfIndex
+        File outFileVarscanFilteredVcfGz = varscan.outFileFilteredVcfGz
+        File outFileVarscanFilteredVcfIndex = varscan.outFileFilteredVcfIndex
     }
 }

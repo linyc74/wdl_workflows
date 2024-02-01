@@ -2,9 +2,7 @@ version 1.0
 
 import "../../GeneralTask.wdl" as general
 
-# WORKFLOW DEFINITION
 
-# Generate a VarDict paired variant calling processed ready vcf
 workflow VardictPairedCallingProcess {
     input {
         File inFileTumorBam
@@ -47,7 +45,7 @@ workflow VardictPairedCallingProcess {
             sampleName = sampleName
     }
 
-    call general.PythonVariantFilter as filter {
+    call general.VariantFiltering as filter {
         input:
             inFileVcfGz = Var2Vcf.outFileVcfGz,
             sampleName = sampleName,
@@ -57,16 +55,12 @@ workflow VardictPairedCallingProcess {
     output {
         File outFileVcfGz = Var2Vcf.outFileVcfGz
         File outFileVcfIndex = Var2Vcf.outFileVcfIndex
-        File outFilePythonFilterVcfGz = filter.outFileVcfGz
-        File outFilePythonFilterVcfIndex = filter.outFileVcfIndex
+        File outFileFilteredVcfGz = filter.outFileVcfGz
+        File outFileFilteredVcfIndex = filter.outFileVcfIndex
     }
 }
 
 
-
-# TASK DEFINITIONS
-
-# Call variants using VarDict paired variant calling mode step1:vardict
 task VardictPaired {
     input {
         File inFileTumorBam
@@ -104,7 +98,7 @@ task VardictPaired {
     }
 }
 
-# Call variants using VarDict paired variant calling mode step2:testsomatic.R
+
 task TestsomaticR {
     input {
         File inFileVardictStep1
@@ -127,7 +121,7 @@ task TestsomaticR {
     }
 }
 
-# Call variants using VarDict paired variant calling mode step3:var2vcf
+
 task Var2Vcf {
     input {
         File inFileVardictStep2
@@ -158,49 +152,3 @@ task Var2Vcf {
         docker: 'nycu:latest'
     }
 }
-
-# Call variants using VarDict paired variant calling mode
-# task VardictPaired {
-#     input {
-#         File inFileTumorBam
-#         File inFileTumorBamIndex
-#         File inFileNormalBam
-#         File inFileNormalBamIndex
-#         File inFileIntervalBed
-#         File refFa
-#         File refFai
-#         Float minimumAF = 0.01
-#         String tumorSampleName
-#         String normalSampleName
-#         String sampleName
-#     }
- 
-#     command <<<
-#         set -e -o pipefail
-#         vardict \
-#         -G ~{refFa} \
-#         -f ~{minimumAF} \
-#         -N ~{tumorSampleName} \
-#         -b "~{inFileTumorBam} | ~{inFileNormalBam}" \
-#         -c 1 \
-#         -S 2 \
-#         -E 3 \
-#         -g 4 \
-#         ~{inFileIntervalBed} \
-#         | \
-#         testsomatic.R \
-#         | \
-#         var2vcf_paired.pl \
-#         -N "~{tumorSampleName} | ~{normalSampleName}" \
-#         -f ~{minimumAF} \
-#         1 > ~{sampleName}.vcf
-#     >>>
- 
-#     output {
-#         File outFileVcf = "~{sampleName}.vcf"
-#     }
- 
-#     runtime {
-#         docker: 'nycu:latest'
-#     }
-# }

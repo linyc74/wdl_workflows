@@ -2,7 +2,6 @@ version 1.0
 
 import "../../GeneralTask.wdl" as general
 
-# WORKFLOW DEFINITION
 
 # Generate a SomaticSniper processed ready vcf
 workflow BamSomaticsniperCallingProcess {
@@ -27,7 +26,7 @@ workflow BamSomaticsniperCallingProcess {
             sampleName = sampleName
     }
 
-    call general.PythonVariantFilter as filter {
+    call general.VariantFiltering as filter {
         input:
             inFileVcfGz = BamSomaticsniper.outFileVcfGz,
             sampleName = sampleName,
@@ -37,12 +36,11 @@ workflow BamSomaticsniperCallingProcess {
     output {
         File outFileVcfGz = BamSomaticsniper.outFileVcfGz
         File outFileVcfIndex = BamSomaticsniper.outFileVcfIndex
-        File outFilePythonFilterVcfGz = filter.outFileVcfGz
-        File outFilePythonFilterVcfIndex = filter.outFileVcfIndex
+        File outFileFilteredVcfGz = filter.outFileVcfGz
+        File outFileFilteredVcfIndex = filter.outFileVcfIndex
     }
 }
 
-# TASK DEFINITIONS
 
 # Call variants using SomaticSniper
 task BamSomaticsniper {

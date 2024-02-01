@@ -2,9 +2,7 @@ version 1.0
 
 import "../../GeneralTask.wdl" as general
 
-# WORKFLOW DEFINITION
 
-# Generate a LoFreq somatic processed ready vcf
 workflow LoFreqSomaticCallingProcess {
     input {
         File inFileTumorBam
@@ -39,7 +37,7 @@ workflow LoFreqSomaticCallingProcess {
             callerName = "lofreq"
     }
 
-    call general.PythonVariantFilter as filter {
+    call general.VariantFiltering as filter {
         input:
             inFileVcfGz = concat.outFileVcfGz,
             sampleName = sampleName,
@@ -49,14 +47,12 @@ workflow LoFreqSomaticCallingProcess {
     output {
         File outFileVcfGz = concat.outFileVcfGz
         File outFileVcfIndex = concat.outFileVcfIndex
-        File outFilePythonFilterVcfGz = filter.outFileVcfGz
-        File outFilePythonFilterVcfIndex = filter.outFileVcfIndex
+        File outFileFilteredVcfGz = filter.outFileVcfGz
+        File outFileFilteredVcfIndex = filter.outFileVcfIndex
     }
 }
 
-# TASK DEFINITIONS
 
-# Call somatic variants in matched tumor/normal pairs using Lofreq
 task LoFreqSomatic {
     input {
         File inFileTumorBam

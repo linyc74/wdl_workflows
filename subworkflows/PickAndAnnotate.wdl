@@ -1,8 +1,6 @@
 version 1.0
 
-# WORKFLOW DEFINITION
 
-# The annotation part within NYCU Dentistry somatic pipeline. To pick variants then annotate by PCGR.
 workflow PickAndAnnotate {
     input {
         File inFileVcfSS
@@ -16,7 +14,7 @@ workflow PickAndAnnotate {
         String sampleName
     }
  
-    call PythonVariantPicking {
+    call VariantPicking {
         input:
             inFileVcfSS = inFileVcfSS,
             inFileVcfMU = inFileVcfMU,
@@ -30,14 +28,20 @@ workflow PickAndAnnotate {
 
     call PCGR {
         input:
-            inFileVcfGz = PythonVariantPicking.outFileVcfGz,
-            inFileVcfIndex = PythonVariantPicking.outFileVcfIndex,
+            inFileVcfGz = VariantPicking.outFileVcfGz,
+            inFileVcfIndex = VariantPicking.outFileVcfIndex,
             inDirPCGRref = inDirPCGRref,
+            sampleName = sampleName
+    }
+
+    call Vcf2Csv {
+        input:
+            inFileVcfGz = PCGR.outFileVcfGz,
             sampleName = sampleName
     }
  
     output {
-        File outFilePCGRannotatedVcf = PCGR.outFileVcf
+        File outFilePCGRannotatedVcf = PCGR.outFileVcfGz
         File outFilePCGRannotatedVcfIndex = PCGR.outFileVcfIndex
         File outFileMaf = PCGR.outFileMaf
         File outFilePCGRflexdbHtml = PCGR.outFileFlexdbHtml
@@ -45,10 +49,8 @@ workflow PickAndAnnotate {
     }
 }
 
-# TASK DEFINITIONS
 
-# Picking variants from multiple caller's vcf using the self maintained python code
-task PythonVariantPicking {
+task VariantPicking {
     input {
         File inFileVcfSS
         File inFileVcfMU
@@ -90,7 +92,7 @@ task PythonVariantPicking {
     }
 }
 
-# Annotate vcf using PCGR
+
 task PCGR {
     input {
         File inFileVcfGz
@@ -108,9 +110,9 @@ task PCGR {
         --genome_assembly grch38 \
         --vep_buffer_size 30000 \
         --sample_id ~{sampleName}
-        # --vcf2maf
 
         zcat pcgr_output/~{sampleName}.pcgr_acmg.grch38.vcf.gz > file_for_vcf2maf.vcf
+
         vcf2maf.pl \
         --input-vcf file_for_vcf2maf.vcf \
         --output-maf ~{sampleName}.maf \
@@ -121,7 +123,7 @@ task PCGR {
     >>>
  
     output {
-        File outFileVcf = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.vcf.gz"
+        File outFileVcfGz = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.vcf.gz"
         File outFileVcfIndex = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.vcf.gz.tbi"
         File outFileMaf = "~{sampleName}.maf"
         File outFileFlexdbHtml = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.flexdb.html"
@@ -133,3 +135,26 @@ task PCGR {
     }
 }
 
+
+task Vcf2Csv {
+
+    input {
+        File inFileVcfGz
+        String sampleName
+    }
+
+    command <<<
+        set -e -o pipefail
+        python /usr/local/seqslab/omic vcf2csv \
+        --input-vcf ~{inFileVcfGz}
+        --output-csv ~{sampleName}.csv
+    >>>
+
+    output {
+        File outFileCsv = "~{sampleName}.csv"
+    }
+
+    runtime {
+        docker: 'nycu:latest'
+    }
+}
