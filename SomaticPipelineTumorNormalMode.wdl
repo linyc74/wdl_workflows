@@ -27,17 +27,17 @@ workflow SomaticPipelineTumorNormalMode {
         File refFa
         File refFai
         File refDict
-        Array[String] tumorSampleName
-        Array[String] normalSampleName
-        Array[String] finalOutputName
+        Array[String] tumorSampleNames
+        Array[String] normalSampleNames
+        Array[String] finalOutputNames
     }
 
-    scatter (i in range(length(finalOutputName))) {
+    scatter (i in range(length(finalOutputNames))) {
         Array[File] iFTFs = inFileTumorFastqs[i]
         Array[File] iFNFs = inFileNormalFastqs[i]
-        String tSN = tumorSampleName[i]
-        String nSN = normalSampleName[i]
-        String fON = finalOutputName[i]
+        String tumorSampleName = tumorSampleNames[i]
+        String normalSampleName = normalSampleNames[i]
+        String finalOutputName = finalOutputNames[i]
 
         call general.FastQC as fastqcTumorFastq {
             input:
@@ -65,20 +65,20 @@ workflow SomaticPipelineTumorNormalMode {
                 refFa = refFa,
                 refFai = refFai,
                 refDict = refDict,
-                tumorSampleName = tSN,
-                normalSampleName = nSN
+                tumorSampleName = tumorSampleName,
+                normalSampleName = normalSampleName
         }
 
         call general.BamStats as tumorBamStats {
             input:
                 inFileBam = TNmapping.outFileTumorBam,
-                sampleName = tSN
+                sampleName = tumorSampleName
         }
 
         call general.BamStats as normalBamStats {
             input:
                 inFileBam = TNmapping.outFileNormalBam,
-                sampleName = nSN
+                sampleName = normalSampleName
         }
 
         call caller.TNPairedVariantCalling as variantCalling {
@@ -95,9 +95,9 @@ workflow SomaticPipelineTumorNormalMode {
                 refFa = refFa,
                 refFai = refFai,
                 refDict = refDict,
-                tumorSampleName = tSN,
-                normalSampleName = nSN,
-                sampleName = fON,
+                tumorSampleName = tumorSampleName,
+                normalSampleName = normalSampleName,
+                sampleName = finalOutputName,
                 vardictMinimumAF = 0.01
         }
 
@@ -110,7 +110,7 @@ workflow SomaticPipelineTumorNormalMode {
                 inFileVcfVD = variantCalling.outFileVardictFilteredVcfGz,
                 infileVcfVS = variantCalling.outFileVarscanFilteredVcfGz,
                 refFa = refFa,
-                sampleName = fON
+                sampleName = finalOutputName
         }
 
         call annot.Annotate as variantAnnotation {
@@ -118,7 +118,7 @@ workflow SomaticPipelineTumorNormalMode {
                 inFileVcfGz = variantPicking.outFileVcfGz,
                 inFileVcfIndex = variantPicking.outFileVcfIndex,
                 inDirPCGRref = inDirPCGRref,
-                sampleName = fON
+                sampleName = finalOutputName
         }
     }
     
@@ -137,11 +137,11 @@ workflow SomaticPipelineTumorNormalMode {
         Array[File] outFileTumorSortedRawBam = TNmapping.outFileTumorSortedRawBam
         Array[File] outFileNormalSortedRawBam = TNmapping.outFileNormalSortedRawBam
 
-        Array[File] outFileStatsTumorBam = tumorBamStats.outFileBamStats
-        Array[File] outFileStatsNormalBam = normalBamStats.outFileBamStats
+        Array[File] outFileTumorBamStats = tumorBamStats.outFileBamStats
+        Array[File] outFileNormalBamStats = normalBamStats.outFileBamStats
 
         Array[File] outFileSomaticsniperFilteredVcfGz = variantCalling.outFileSomaticsniperFilteredVcfGz
-        Array[File] outFileBamsomaticsniperFilteredVcfIndex = variantCalling.outFileBamsomaticsniperFilteredVcfIndex
+        Array[File] outFileSomaticsniperFilteredVcfIndex = variantCalling.outFileSomaticsniperFilteredVcfIndex
         Array[File] outFileLofreqFilteredVcfGz = variantCalling.outFileLofreqFilteredVcfGz
         Array[File] outFileLofreqFilteredVcfIndex = variantCalling.outFileLofreqFilteredVcfIndex
         Array[File] outFileMuseFilteredVcfGz = variantCalling.outFileMuseFilteredVcfGz
@@ -152,19 +152,6 @@ workflow SomaticPipelineTumorNormalMode {
         Array[File] outFileVardictFilteredVcfIndex = variantCalling.outFileVardictFilteredVcfIndex
         Array[File] outFileVarscanFilteredVcfGz = variantCalling.outFileVarscanFilteredVcfGz
         Array[File] outFileVarscanFilteredVcfIndex = variantCalling.outFileVarscanFilteredVcfIndex
-
-        Array[File] outFileBamsomaticsniperVcfGz = variantCalling.outFileBamsomaticsniperVcfGz
-        Array[File] outFileBamsomaticsniperVcfIndex = variantCalling.outFileBamsomaticsniperVcfIndex
-        Array[File] outFileLofreqVcfGz = variantCalling.outFileLofreqVcfGz
-        Array[File] outFileLofreqVcfIndex = variantCalling.outFileLofreqVcfIndex
-        Array[File] outFileMuseVcfGz = variantCalling.outFileMuseVcfGz
-        Array[File] outFileMuseVcfIndex = variantCalling.outFileMuseVcfIndex
-        Array[File] outFileMutect2VcfGz = variantCalling.outFileMutect2VcfGz
-        Array[File] outFileMutect2VcfIndex = variantCalling.outFileMutect2VcfIndex
-        Array[File] outFileVardictVcfGz = variantCalling.outFileVardictVcfGz
-        Array[File] outFileVardictVcfIndex = variantCalling.outFileVardictVcfIndex
-        Array[File] outFileVarscanVcfGz = variantCalling.outFileVarscanVcfGz
-        Array[File] outFileVarscanVcfIndex = variantCalling.outFileVarscanVcfIndex
 
         Array[File] outFilePCGRannotatedVcf = variantAnnotation.outFilePCGRannotatedVcf
         Array[File] outFilePCGRannotatedVcfIndex = variantAnnotation.outFilePCGRannotatedVcfIndex

@@ -109,8 +109,8 @@ workflow TNPairedVariantCalling {
     }
  
     output {
-        File outFileBamsomaticsniperVcfGz = bamsomaticsniper.outFileVcfGz
-        File outFileBamsomaticsniperVcfIndex = bamsomaticsniper.outFileVcfIndex
+        File outFileSomaticsniperVcfGz = bamsomaticsniper.outFileVcfGz
+        File outFileSomaticsniperVcfIndex = bamsomaticsniper.outFileVcfIndex
         File outFileLofreqVcfGz = lofreq.outFileVcfGz
         File outFileLofreqVcfIndex = lofreq.outFileVcfIndex
         File outFileMuseVcfGz = muse.outFileVcfGz
@@ -123,7 +123,7 @@ workflow TNPairedVariantCalling {
         File outFileVarscanVcfIndex = varscan.outFileVcfIndex
 
         File outFileSomaticsniperFilteredVcfGz = bamsomaticsniper.outFileFilteredVcfGz
-        File outFileBamsomaticsniperFilteredVcfIndex = bamsomaticsniper.outFileFilteredVcfIndex
+        File outFileSomaticsniperFilteredVcfIndex = bamsomaticsniper.outFileFilteredVcfIndex
         File outFileLofreqFilteredVcfGz = lofreq.outFileFilteredVcfGz
         File outFileLofreqFilteredVcfIndex = lofreq.outFileFilteredVcfIndex
         File outFileMuseFilteredVcfGz = muse.outFileFilteredVcfGz
