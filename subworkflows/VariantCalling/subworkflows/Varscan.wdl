@@ -1,6 +1,6 @@
 version 1.0
 
-import "../../GeneralTask.wdl" as general
+import "GeneralTask.wdl" as general
 
 
 workflow Varscan {
@@ -15,7 +15,7 @@ workflow Varscan {
         String sampleName
     }
  
-    call general.Mpileup as tumorMpileup {
+    call Mpileup as tumorMpileup {
         input:
             inFileBam = inFileTumorBam,
             inFileIntervalBed = inFileIntervalBed,
@@ -24,7 +24,7 @@ workflow Varscan {
             sampleName = tumorSampleName
     }
  
-    call general.Mpileup as normalMpileup {
+    call Mpileup as normalMpileup {
         input:
             inFileBam = inFileNormalBam,
             inFileIntervalBed = inFileIntervalBed,
@@ -40,7 +40,7 @@ workflow Varscan {
             sampleName = sampleName
     }
 
-    call general.Concat as concat {
+    call general.ConcatSnvIndelVcfs as concat {
         input:
             inFileSnvVcf = VarscanSomatic.outFileSnpVcfGz,
             inFileSnvVcfIndex = VarscanSomatic.outFileSnpVcfIndex,
@@ -62,6 +62,34 @@ workflow Varscan {
         File outFileVcfIndex = concat.outFileVcfIndex
         File outFileFilteredVcfGz = filter.outFileVcfGz
         File outFileFilteredVcfIndex = filter.outFileVcfIndex
+    }
+}
+
+
+task Mpileup {
+    input {
+        File inFileBam
+        File inFileIntervalBed
+        File refFa
+        File refFai
+        String sampleName
+    }
+
+    command <<<
+        set -e -o pipefail
+        samtools mpileup \
+        --fasta-ref ~{refFa} \
+        --positions ~{inFileIntervalBed} \
+        --output ~{sampleName}_pileup.txt \
+        ~{inFileBam}
+    >>>
+
+    output {
+        File outFilePileup = "~{sampleName}_pileup.txt"
+    }
+
+    runtime {
+        docker: 'nycu:latest'
     }
 }
 

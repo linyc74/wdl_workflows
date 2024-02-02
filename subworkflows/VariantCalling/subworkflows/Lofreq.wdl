@@ -1,6 +1,6 @@
 version 1.0
 
-import "../../GeneralTask.wdl" as general
+import "GeneralTask.wdl" as general
 
 
 workflow Lofreq {
@@ -27,7 +27,7 @@ workflow Lofreq {
             sampleName = sampleName
     }
 
-    call general.Concat as concat {
+    call general.ConcatSnvIndelVcfs as concat {
         input:
             inFileSnvVcf = LofreqSomatic.outFileSnvVcf,
             inFileSnvVcfIndex = LofreqSomatic.outFileSnvVcfIndex,

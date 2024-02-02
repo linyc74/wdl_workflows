@@ -1,9 +1,8 @@
 version 1.0
 
-import "../../GeneralTask.wdl" as general
+import "GeneralTask.wdl" as general
 
 
-# Generate a SomaticSniper processed ready vcf
 workflow Somaticsniper {
     input {
         File inFileTumorBam
@@ -42,7 +41,6 @@ workflow Somaticsniper {
 }
 
 
-# Call variants using SomaticSniper
 task BamSomaticsniper {
     input {
         File inFileTumorBam

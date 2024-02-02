@@ -1,6 +1,6 @@
 version 1.0
 
-import "subworkflows/Somaticsniper.wdl" as bamSomaticsniper
+import "subworkflows/Somaticsniper.wdl" as somaticsniper
 import "subworkflows/Lofreq.wdl" as lofreq
 import "subworkflows/Muse.wdl" as muse
 import "subworkflows/Mutect2.wdl" as mutect2
@@ -28,7 +28,7 @@ workflow TNPairedVariantCalling {
         String sampleName
     }
     
-    call bamSomaticsniper.Somaticsniper as bamsomaticsniper {
+    call somaticsniper.Somaticsniper as bamsomaticsniper {
         input:
             inFileTumorBam = inFileTumorBam,
             inFileNormalBam = inFileNormalBam,
@@ -122,7 +122,7 @@ workflow TNPairedVariantCalling {
         File outFileVarscanVcfGz = varscan.outFileVcfGz
         File outFileVarscanVcfIndex = varscan.outFileVcfIndex
 
-        File outFileBamsomaticsniperFilteredVcfGz = bamsomaticsniper.outFileFilteredVcfGz
+        File outFileSomaticsniperFilteredVcfGz = bamsomaticsniper.outFileFilteredVcfGz
         File outFileBamsomaticsniperFilteredVcfIndex = bamsomaticsniper.outFileFilteredVcfIndex
         File outFileLofreqFilteredVcfGz = lofreq.outFileFilteredVcfGz
         File outFileLofreqFilteredVcfIndex = lofreq.outFileFilteredVcfIndex

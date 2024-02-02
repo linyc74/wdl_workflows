@@ -1,6 +1,6 @@
 version 1.0
 
-import "../../GeneralTask.wdl" as general
+import "GeneralTask.wdl" as general
 
 
 workflow Vardict {

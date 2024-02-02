@@ -1,10 +1,8 @@
 version 1.0
 
-import "../../GeneralTask.wdl" as general
+import "GeneralTask.wdl" as general
 
-# WORKFLOW DEFINITION
 
-# Generate a Mutect2 processed ready vcf
 workflow Mutect2 {
     input {
         File inFileTumorBam
@@ -76,9 +74,7 @@ workflow Mutect2 {
     }
 }
 
-# TASK DEFINITIONS
 
-# Call variants using GATK Mutect2
 task Mutect2 {
     input {
         File inFileTumorBam
@@ -127,7 +123,7 @@ task Mutect2 {
     }
 }
 
-# Get the maximum likelihood estimates of artifact prior probabilities in the orientation bias mixture model filter
+
 task LearnReadOrientationModel {
     input {
         File inFileF1R2
@@ -149,7 +145,7 @@ task LearnReadOrientationModel {
     }
 }
 
-# Filter variants using GATK FilterMutectCalls
+
 task FilterMutectCalls {
     input {
         File inFileArtifactPriors

@@ -2,7 +2,7 @@ version 1.0
 
 import "subworkflows/GeneralTask.wdl" as general
 import "subworkflows/Mapping/TNPairedMapping.wdl" as mapper
-import "subworkflows/VariantsCalling/TNPairedVariantCalling.wdl" as caller
+import "subworkflows/VariantCalling/TNPairedVariantCalling.wdl" as caller
 import "subworkflows/PickAndAnnotate.wdl" as annotate
 
 
@@ -102,7 +102,7 @@ workflow SomaticPipelineTumorNormalMode {
 
         call annotate.PickAndAnnotate as vcfAnnotate {
             input:
-                inFileVcfSS = variantCalling.outFileBamsomaticsniperFilteredVcfGz,
+                inFileVcfSS = variantCalling.outFileSomaticsniperFilteredVcfGz,
                 inFileVcfMU = variantCalling.outFileMuseFilteredVcfGz,
                 inFileVcfM2 = variantCalling.outFileMutect2FilteredVcfGz,
                 inFileVcfLF = variantCalling.outFileLofreqFilteredVcfGz,
@@ -132,7 +132,7 @@ workflow SomaticPipelineTumorNormalMode {
         Array[File] outFileStatsTumorBam = tumorBamStats.outFileBamStats
         Array[File] outFileStatsNormalBam = normalBamStats.outFileBamStats
 
-        Array[File] outFileBamsomaticsniperFilteredVcfGz = variantCalling.outFileBamsomaticsniperFilteredVcfGz
+        Array[File] outFileSomaticsniperFilteredVcfGz = variantCalling.outFileSomaticsniperFilteredVcfGz
         Array[File] outFileBamsomaticsniperFilteredVcfIndex = variantCalling.outFileBamsomaticsniperFilteredVcfIndex
         Array[File] outFileLofreqFilteredVcfGz = variantCalling.outFileLofreqFilteredVcfGz
         Array[File] outFileLofreqFilteredVcfIndex = variantCalling.outFileLofreqFilteredVcfIndex
