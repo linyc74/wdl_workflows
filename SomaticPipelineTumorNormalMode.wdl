@@ -3,7 +3,8 @@ version 1.0
 import "subworkflows/GeneralTask.wdl" as general
 import "subworkflows/Mapping/TNPairedMapping.wdl" as mapper
 import "subworkflows/VariantCalling/TNPairedVariantCalling.wdl" as caller
-import "subworkflows/PickAndAnnotate.wdl" as annotate
+import "subworkflows/VariantPicking.wdl" as pick
+import "subworkflows/Annotate.wdl" as annot
 
 
 workflow SomaticPipelineTumorNormalMode {
@@ -100,7 +101,7 @@ workflow SomaticPipelineTumorNormalMode {
                 vardictMinimumAF = 0.01
         }
 
-        call annotate.PickAndAnnotate as vcfAnnotate {
+        call pick.VariantPicking as variantPicking {
             input:
                 inFileVcfSS = variantCalling.outFileSomaticsniperFilteredVcfGz,
                 inFileVcfMU = variantCalling.outFileMuseFilteredVcfGz,
@@ -108,8 +109,15 @@ workflow SomaticPipelineTumorNormalMode {
                 inFileVcfLF = variantCalling.outFileLofreqFilteredVcfGz,
                 inFileVcfVD = variantCalling.outFileVardictFilteredVcfGz,
                 infileVcfVS = variantCalling.outFileVarscanFilteredVcfGz,
-                inDirPCGRref = inDirPCGRref,
                 refFa = refFa,
+                sampleName = fON
+        }
+
+        call annot.Annotate as variantAnnotation {
+            input:
+                inFileVcfGz = variantPicking.outFileVcfGz,
+                inFileVcfIndex = variantPicking.outFileVcfIndex,
+                inDirPCGRref = inDirPCGRref,
                 sampleName = fON
         }
     }
@@ -158,13 +166,13 @@ workflow SomaticPipelineTumorNormalMode {
         Array[File] outFileVarscanVcfGz = variantCalling.outFileVarscanVcfGz
         Array[File] outFileVarscanVcfIndex = variantCalling.outFileVarscanVcfIndex
 
-        Array[File] outFilePCGRannotatedVcf = vcfAnnotate.outFilePCGRannotatedVcf
-        Array[File] outFilePCGRannotatedVcfIndex = vcfAnnotate.outFilePCGRannotatedVcfIndex
+        Array[File] outFilePCGRannotatedVcf = variantAnnotation.outFilePCGRannotatedVcf
+        Array[File] outFilePCGRannotatedVcfIndex = variantAnnotation.outFilePCGRannotatedVcfIndex
 
-        Array[File] outFileMaf = vcfAnnotate.outFileMaf
-        Array[File] outFileCsv = vcfAnnotate.outFileCsv
+        Array[File] outFileMaf = variantAnnotation.outFileMaf
+        Array[File] outFileCsv = variantAnnotation.outFileCsv
 
-        Array[File] outFilePCGRflexdbHtml = vcfAnnotate.outFilePCGRflexdbHtml
-        Array[File] outFilePCGRhtml = vcfAnnotate.outFilePCGRhtml
+        Array[File] outFilePCGRflexdbHtml = variantAnnotation.outFilePCGRflexdbHtml
+        Array[File] outFilePCGRhtml = variantAnnotation.outFilePCGRhtml
     }
 }
