@@ -1,9 +1,7 @@
 version 1.0
 
-# WORKFLOW DEFINITION
 
-# Take in a raw bam and generate a analysis-ready bam file
-workflow PostMappingProcess {
+workflow PostMapping {
     input {
         File inFileUnSortRawBam
         File inFileDbsnpVcf
@@ -55,9 +53,6 @@ workflow PostMappingProcess {
 }
 
 
-# TASK DEFINITIONS
-
-# Sort reads within bam using samtools
 task Sort {
     input {
         File inFileBam
@@ -78,7 +73,7 @@ task Sort {
     }
 }
 
-# Mark duplicate reads using GATK
+
 task MarkDuplicates {
     input {
         File inFileBam
@@ -104,7 +99,7 @@ task MarkDuplicates {
     }
 }
 
-# GATK BQSR step1. Generates recalibration table for Base Quality Score Recalibration
+
 task BaseRecalibrator {
     input {
         File inFileDbsnpVcf
@@ -134,7 +129,7 @@ task BaseRecalibrator {
     }
 }
 
-# GATK BQSR step2. Apply base quality score recalibration
+
 task ApplyBqsr {
     input {
         File inFileBam
@@ -152,7 +147,6 @@ task ApplyBqsr {
         --reference ~{refFa} \
         --bqsr-recal-file ~{inFileRecalibrationTable} \
         --output ~{sampleName}.bam
-
     >>>
  
     runtime {

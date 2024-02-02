@@ -4,7 +4,7 @@ import "../../GeneralTask.wdl" as general
 
 
 # Generate a SomaticSniper processed ready vcf
-workflow BamSomaticsniperCallingProcess {
+workflow Somaticsniper {
     input {
         File inFileTumorBam
         File inFileNormalBam

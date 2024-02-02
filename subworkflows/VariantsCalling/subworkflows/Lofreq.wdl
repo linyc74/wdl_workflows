@@ -3,7 +3,7 @@ version 1.0
 import "../../GeneralTask.wdl" as general
 
 
-workflow LoFreqSomaticCallingProcess {
+workflow Lofreq {
     input {
         File inFileTumorBam
         File inFileTumorBamIndex
@@ -15,7 +15,7 @@ workflow LoFreqSomaticCallingProcess {
         String sampleName
     }
  
-    call LoFreqSomatic {
+    call LofreqSomatic {
         input:
             inFileTumorBam = inFileTumorBam,
             inFileTumorBamIndex = inFileTumorBamIndex,
@@ -29,10 +29,10 @@ workflow LoFreqSomaticCallingProcess {
 
     call general.Concat as concat {
         input:
-            inFileSnvVcf = LoFreqSomatic.outFileSnvVcf,
-            inFileSnvVcfIndex = LoFreqSomatic.outFileSnvVcfIndex,
-            inFileIndelVcf = LoFreqSomatic.outFileIndelVcf,
-            infileIndelVcfIndex = LoFreqSomatic.outFileIndelVcfIndex,
+            inFileSnvVcf = LofreqSomatic.outFileSnvVcf,
+            inFileSnvVcfIndex = LofreqSomatic.outFileSnvVcfIndex,
+            inFileIndelVcf = LofreqSomatic.outFileIndelVcf,
+            infileIndelVcfIndex = LofreqSomatic.outFileIndelVcfIndex,
             sampleName = sampleName,
             callerName = "lofreq"
     }
@@ -53,7 +53,7 @@ workflow LoFreqSomaticCallingProcess {
 }
 
 
-task LoFreqSomatic {
+task LofreqSomatic {
     input {
         File inFileTumorBam
         File inFileTumorBamIndex

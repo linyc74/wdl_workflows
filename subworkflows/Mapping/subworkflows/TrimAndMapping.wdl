@@ -1,8 +1,6 @@
 version 1.0
 
-# WORKFLOW DEFINITION
 
-# Take in both R1 and R2 fastq files then generate the trimmed fastq files and bam file.
 workflow TrimAndMapping {
     input {
         Array[File] inFileFastqs
@@ -43,9 +41,7 @@ workflow TrimAndMapping {
     }
 }
 
-# TASK DEFINITIONS
 
-# Align reads using bwa mem and output a bam file
 task BwaMem {
     input {
         File inFileFastqR1
@@ -81,7 +77,7 @@ task BwaMem {
     }
 }
 
-# Fastq preprocessing using Trim Galore with paired-end option
+
 task TrimGalore {
     input {
         File inFileFastqR1

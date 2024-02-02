@@ -1,12 +1,10 @@
 version 1.0
 
-import "subworkflows/TrimAndMapping.wdl" as mapping
-import "subworkflows/PostMappingProcess.wdl" as postMapping
+import "subworkflows/TrimAndMapping.wdl" as trimAndMapping
+import "subworkflows/PostMapping.wdl" as postMapping
 
-# WORKFLOW DEFINITION
 
-# Take both tumor and normal paired-end fastq files, using TrimGalore trim then using bwa-mem align to reference genome
-workflow TNpairedMapping {
+workflow TNPairedMapping {
     input {
         Array[File] inFileTumorFastqs
         Array[File] inFileNormalFastqs
@@ -24,7 +22,7 @@ workflow TNpairedMapping {
         String normalSampleName
     }
 
-    call mapping.TrimAndMapping as trimAndMapTumorFastq {
+    call trimAndMapping.TrimAndMapping as trimAndMapTumor {
         input:
             refAmb = refAmb,
             refAnn = refAnn,
@@ -37,7 +35,7 @@ workflow TNpairedMapping {
             inFileFastqs = inFileTumorFastqs
     }
 
-    call mapping.TrimAndMapping as trimAndMapNormalFastq {
+    call trimAndMapping.TrimAndMapping as trimAndMapNormal {
         input:
             refAmb = refAmb,
             refAnn = refAnn,
@@ -50,9 +48,9 @@ workflow TNpairedMapping {
             inFileFastqs = inFileNormalFastqs
     }
 
-    call postMapping.PostMappingProcess as postMappingTumorBam {
+    call postMapping.PostMapping as postMappingTumor {
         input:
-            inFileUnSortRawBam = trimAndMapTumorFastq.outFileUnSortRawBam,
+            inFileUnSortRawBam = trimAndMapTumor.outFileUnSortRawBam,
             inFileDbsnpVcf = inFileDbsnpVcf,
             inFileDbsnpVcfIndex = inFileDbsnpVcfIndex,
             refFa = refFa,
@@ -61,9 +59,9 @@ workflow TNpairedMapping {
             sampleName = tumorSampleName
     }
 
-    call postMapping.PostMappingProcess as postMappingNormalBam {
+    call postMapping.PostMapping as postMappingNormal {
         input:
-            inFileUnSortRawBam = trimAndMapNormalFastq.outFileUnSortRawBam,
+            inFileUnSortRawBam = trimAndMapNormal.outFileUnSortRawBam,
             inFileDbsnpVcf = inFileDbsnpVcf,
             inFileDbsnpVcfIndex = inFileDbsnpVcfIndex,
             refFa = refFa,
@@ -73,13 +71,16 @@ workflow TNpairedMapping {
     }
  
     output {
-        Array[File] outFileTumorTrimmedFastqs = trimAndMapTumorFastq.outFileTrimmedFastq
-        Array[File] outFileNormalTrimmedFastqs = trimAndMapNormalFastq.outFileTrimmedFastq
-        File outFileTumorBam = postMappingTumorBam.outFileBam
-        File outFileNormalBam = postMappingNormalBam.outFileBam
-        File outFileTumorBamIndex = postMappingTumorBam.outFileBamIndex
-        File outFileNormalBamIndex = postMappingNormalBam.outFileBamIndex
-        File outFileTumorSortedRawBam = postMappingTumorBam.outFileSortedRawBam
-        File outFileNormalSortedRawBam = postMappingNormalBam.outFileSortedRawBam
+        Array[File] outFileTumorTrimmedFastqs = trimAndMapTumor.outFileTrimmedFastq
+        Array[File] outFileNormalTrimmedFastqs = trimAndMapNormal.outFileTrimmedFastq
+
+        File outFileTumorBam = postMappingTumor.outFileBam
+        File outFileNormalBam = postMappingNormal.outFileBam
+
+        File outFileTumorBamIndex = postMappingTumor.outFileBamIndex
+        File outFileNormalBamIndex = postMappingNormal.outFileBamIndex
+
+        File outFileTumorSortedRawBam = postMappingTumor.outFileSortedRawBam
+        File outFileNormalSortedRawBam = postMappingNormal.outFileSortedRawBam
     }
 }

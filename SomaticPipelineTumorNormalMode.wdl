@@ -1,8 +1,8 @@
 version 1.0
 
 import "subworkflows/GeneralTask.wdl" as general
-import "subworkflows/Mapping/TNpairedMapping.wdl" as mapper
-import "subworkflows/VariantsCalling/TNpairedVariantsCalling.wdl" as caller
+import "subworkflows/Mapping/TNPairedMapping.wdl" as mapper
+import "subworkflows/VariantsCalling/TNPairedVariantCalling.wdl" as caller
 import "subworkflows/PickAndAnnotate.wdl" as annotate
 
 
@@ -50,7 +50,7 @@ workflow SomaticPipelineTumorNormalMode {
                 inFileFastqR2 = iFNFs[1]
         }
 
-        call mapper.TNpairedMapping as TNmapping {
+        call mapper.TNPairedMapping as TNmapping {
             input:
                 inFileTumorFastqs = iFTFs,
                 inFileNormalFastqs = iFNFs,
@@ -80,7 +80,7 @@ workflow SomaticPipelineTumorNormalMode {
                 sampleName = nSN
         }
 
-        call caller.TNpairedVariantsCalling as variantCalling {
+        call caller.TNPairedVariantCalling as variantCalling {
             input:
                 inFileTumorBam = TNmapping.outFileTumorBam,
                 inFileTumorBamIndex = TNmapping.outFileTumorBamIndex,
@@ -106,7 +106,7 @@ workflow SomaticPipelineTumorNormalMode {
                 inFileVcfMU = variantCalling.outFileMuseFilteredVcfGz,
                 inFileVcfM2 = variantCalling.outFileMutect2FilteredVcfGz,
                 inFileVcfLF = variantCalling.outFileLofreqFilteredVcfGz,
-                inFileVcfVD = variantCalling.outFileVardictFilteredVcfGz,  ###
+                inFileVcfVD = variantCalling.outFileVardictFilteredVcfGz,
                 infileVcfVS = variantCalling.outFileVarscanFilteredVcfGz,
                 inDirPCGRref = inDirPCGRref,
                 refFa = refFa,
@@ -117,16 +117,21 @@ workflow SomaticPipelineTumorNormalMode {
     output {
         Array[Array[File]] outFileTumorTrimmedFastqs = TNmapping.outFileTumorTrimmedFastqs
         Array[Array[File]] outFileNormalTrimmedFastqs = TNmapping.outFileNormalTrimmedFastqs
+
         Array[File] outFileTumorFastqcReportTar = fastqcTumorFastq.outFileFastqcReportTar
         Array[File] outFileNormalFastqcReportTar = fastqcNormalFastq.outFileFastqcReportTar
+
         Array[File] outFileTumorBam = TNmapping.outFileTumorBam
         Array[File] outFileNormalBam = TNmapping.outFileNormalBam
         Array[File] outFileTumorBamIndex = TNmapping.outFileTumorBamIndex
         Array[File] outFileNormalBamIndex = TNmapping.outFileNormalBamIndex
+
         Array[File] outFileTumorSortedRawBam = TNmapping.outFileTumorSortedRawBam
         Array[File] outFileNormalSortedRawBam = TNmapping.outFileNormalSortedRawBam
+
         Array[File] outFileStatsTumorBam = tumorBamStats.outFileBamStats
         Array[File] outFileStatsNormalBam = normalBamStats.outFileBamStats
+
         Array[File] outFileBamsomaticsniperFilteredVcfGz = variantCalling.outFileBamsomaticsniperFilteredVcfGz
         Array[File] outFileBamsomaticsniperFilteredVcfIndex = variantCalling.outFileBamsomaticsniperFilteredVcfIndex
         Array[File] outFileLofreqFilteredVcfGz = variantCalling.outFileLofreqFilteredVcfGz
@@ -139,6 +144,7 @@ workflow SomaticPipelineTumorNormalMode {
         Array[File] outFileVardictFilteredVcfIndex = variantCalling.outFileVardictFilteredVcfIndex
         Array[File] outFileVarscanFilteredVcfGz = variantCalling.outFileVarscanFilteredVcfGz
         Array[File] outFileVarscanFilteredVcfIndex = variantCalling.outFileVarscanFilteredVcfIndex
+
         Array[File] outFileBamsomaticsniperVcfGz = variantCalling.outFileBamsomaticsniperVcfGz
         Array[File] outFileBamsomaticsniperVcfIndex = variantCalling.outFileBamsomaticsniperVcfIndex
         Array[File] outFileLofreqVcfGz = variantCalling.outFileLofreqVcfGz
@@ -151,9 +157,13 @@ workflow SomaticPipelineTumorNormalMode {
         Array[File] outFileVardictVcfIndex = variantCalling.outFileVardictVcfIndex
         Array[File] outFileVarscanVcfGz = variantCalling.outFileVarscanVcfGz
         Array[File] outFileVarscanVcfIndex = variantCalling.outFileVarscanVcfIndex
+
         Array[File] outFilePCGRannotatedVcf = vcfAnnotate.outFilePCGRannotatedVcf
         Array[File] outFilePCGRannotatedVcfIndex = vcfAnnotate.outFilePCGRannotatedVcfIndex
+
         Array[File] outFileMaf = vcfAnnotate.outFileMaf
+        Array[File] outFileCsv = vcfAnnotate.outFileCsv
+
         Array[File] outFilePCGRflexdbHtml = vcfAnnotate.outFilePCGRflexdbHtml
         Array[File] outFilePCGRhtml = vcfAnnotate.outFilePCGRhtml
     }

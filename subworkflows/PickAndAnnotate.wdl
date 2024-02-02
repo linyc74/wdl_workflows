@@ -45,7 +45,8 @@ workflow PickAndAnnotate {
         File outFilePCGRannotatedVcfIndex = PCGR.outFileVcfIndex
         File outFileMaf = PCGR.outFileMaf
         File outFilePCGRflexdbHtml = PCGR.outFileFlexdbHtml
-        File outFilePCGRhtml = PCGR.outFileHtml       
+        File outFilePCGRhtml = PCGR.outFileHtml
+        File outFileCsv = Vcf2Csv.outFileCsv
     }
 }
 

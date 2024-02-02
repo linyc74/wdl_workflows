@@ -1,14 +1,14 @@
 version 1.0
 
-import "subworkflows/BamSomaticsniperCallingProcess.wdl" as bamSomaticsniperProcess
-import "subworkflows/LoFreqSomaticCallingProcess.wdl" as lofreqProcess
-import "subworkflows/MuseCallingProcess.wdl" as museProcess
-import "subworkflows/Mutect2CallingProcess.wdl" as mutect2Process
-import "subworkflows/VardictPairedCallingProcess.wdl" as vardictProcess
-import "subworkflows/VarscanSomaticCallingProcess.wdl" as varscanProcess
+import "subworkflows/Somaticsniper.wdl" as bamSomaticsniper
+import "subworkflows/Lofreq.wdl" as lofreq
+import "subworkflows/Muse.wdl" as muse
+import "subworkflows/Mutect2.wdl" as mutect2
+import "subworkflows/Vardict.wdl" as vardict
+import "subworkflows/Varscan.wdl" as varscan
 
 
-workflow TNpairedVariantsCalling {
+workflow TNPairedVariantCalling {
     input {
         File inFileTumorBam
         File inFileTumorBamIndex
@@ -28,7 +28,7 @@ workflow TNpairedVariantsCalling {
         String sampleName
     }
     
-    call bamSomaticsniperProcess.BamSomaticsniperCallingProcess as bamsomaticsniper {
+    call bamSomaticsniper.Somaticsniper as bamsomaticsniper {
         input:
             inFileTumorBam = inFileTumorBam,
             inFileNormalBam = inFileNormalBam,
@@ -39,7 +39,7 @@ workflow TNpairedVariantsCalling {
             sampleName = sampleName
     }
 
-    call lofreqProcess.LoFreqSomaticCallingProcess as lofreq {
+    call lofreq.Lofreq as lofreq {
         input:
             inFileTumorBam = inFileTumorBam,
             inFileTumorBamIndex = inFileTumorBamIndex,
@@ -51,7 +51,7 @@ workflow TNpairedVariantsCalling {
             sampleName = sampleName
     }
 
-    call museProcess.MuseCallingProcess as muse {
+    call muse.Muse as muse {
         input:
             inFileTumorBam = inFileTumorBam,
             inFileTumorBamIndex = inFileTumorBamIndex,
@@ -62,7 +62,7 @@ workflow TNpairedVariantsCalling {
             sampleName = sampleName
     }
 
-    call mutect2Process.Mutect2CallingProcess as mutect2 {
+    call mutect2.Mutect2 as mutect2 {
         input:
             inFileTumorBam = inFileTumorBam,
             inFileTumorBamIndex = inFileTumorBamIndex,
@@ -81,7 +81,7 @@ workflow TNpairedVariantsCalling {
             sampleName = sampleName
     }
 
-    call vardictProcess.VardictPairedCallingProcess as vardict {
+    call vardict.Vardict as vardict {
         input:
             inFileTumorBam = inFileTumorBam,
             inFileTumorBamIndex = inFileTumorBamIndex,
@@ -96,7 +96,7 @@ workflow TNpairedVariantsCalling {
             sampleName = sampleName
     }
  
-    call varscanProcess.VarscanSomaticCallingProcess as varscan {
+    call varscan.Varscan as varscan {
         input:
             inFileTumorBam = inFileTumorBam,
             inFileNormalBam = inFileNormalBam,

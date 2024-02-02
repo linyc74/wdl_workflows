@@ -2,10 +2,8 @@ version 1.0
 
 import "../../GeneralTask.wdl" as general
 
-# WORKFLOW DEFINITION
 
-# Generate a MuSE processed ready vcf
-workflow MuseCallingProcess {
+workflow Muse {
     input {
         File inFileTumorBam
         File inFileTumorBamIndex
@@ -48,9 +46,7 @@ workflow MuseCallingProcess {
     }
 }
 
-# TASK DEFINITIONS
 
-# Step 1 of MuSE: carries out pre-filtering and calculating position-specific summary statistics using the Markov substitution model.
 task MuseCall {
     input {
         File inFileTumorBam
@@ -80,7 +76,7 @@ task MuseCall {
     }
 }
 
-# Step 2 of MuSE: computes tier-based cutoffs from a sample-specific error model.
+
 task MuseSump {
     input {
         File inFileMuseResult

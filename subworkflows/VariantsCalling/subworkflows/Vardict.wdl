@@ -3,7 +3,7 @@ version 1.0
 import "../../GeneralTask.wdl" as general
 
 
-workflow VardictPairedCallingProcess {
+workflow Vardict {
     input {
         File inFileTumorBam
         File inFileTumorBamIndex

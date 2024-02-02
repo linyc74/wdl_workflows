@@ -5,7 +5,7 @@ import "../../GeneralTask.wdl" as general
 # WORKFLOW DEFINITION
 
 # Generate a Mutect2 processed ready vcf
-workflow Mutect2CallingProcess {
+workflow Mutect2 {
     input {
         File inFileTumorBam
         File inFileTumorBamIndex
