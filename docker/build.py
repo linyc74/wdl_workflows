@@ -9,7 +9,7 @@ REQUIRED = [
         'properties': {
             'type': str,
             'required': True,
-            'help': 'host name of the container registry, e.g. *.azurecr.io',
+            'help': 'host name of the container registry (e.g. *.azurecr.io)',
         }
     },
     {

@@ -20,6 +20,7 @@ RUN apt-get update && \
     cmake
 
 
+# Link python3 to python
 RUN ln -s /usr/bin/python3 /usr/bin/python \
  && python -m pip install pandas==1.3.5
 

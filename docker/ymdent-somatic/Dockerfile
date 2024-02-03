@@ -1,12 +1,11 @@
 FROM ghcr.io/atgenomix/runtime/base:1.5_22.04
 
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
     wget \
     unzip \
     less \
-    bwa=0.7.17-6 \
     autoconf \
     automake \
     gcc \
@@ -18,24 +17,19 @@ RUN apt-get update && \
     git \
     unzip \
     cmake \
-    build-essential
+    bwa=0.7.17-6 \
+    bedtools=2.30.0+dfsg-2ubuntu0.1
 
 
 # Remove old tabix, new tabix will be installed with htslib
 RUN apt-get remove -y tabix
 
 
-RUN cd /usr/local/seqslab \
-    && wget https://github.com/arq5x/bedtools2/releases/download/v2.31.1/bedtools-2.31.1.tar.gz \
-    && tar -zxvf bedtools-2.31.1.tar.gz \
-    && rm bedtools-2.31.1.tar.gz \
-    && cd bedtools2 \
-    && make \
-    && ln -sr ./bin/* /usr/local/bin
-
-
+# Link python3 to python
 RUN ln -s /usr/bin/python3 /usr/bin/python \
- && python -m pip install pandas==1.3.5
+ && python -m pip install \
+    pandas==1.3.5 \
+    cutadapt==4.2
 
 
 RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc \
@@ -50,9 +44,6 @@ RUN cd /usr/local/seqslab \
     && cd FastQC/ \
     && chmod 755 fastqc \
     && ln -s `pwd`/fastqc /usr/local/bin/fastqc
-
-
-RUN python3 -m pip install cutadapt==4.2
 
 
 RUN cd /usr/local/seqslab \
@@ -99,7 +90,7 @@ RUN cd /usr/local/seqslab \
 RUN cd /usr/local/seqslab \
     && wget https://github.com/CSB5/lofreq/raw/master/dist/lofreq_star-2.1.5_linux-x86-64.tgz \
     && tar -xzf lofreq_star-2.1.5_linux-x86-64.tgz \
-    && rm lofreq_star-2.1.5_linux-x866663636-64.tgz \
+    && rm lofreq_star-2.1.5_linux-x86-64.tgz \
     && mv lofreq_star-2.1.5_linux-x86-64/bin/* /usr/local/bin
 
 
