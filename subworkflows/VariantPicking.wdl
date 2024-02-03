@@ -3,12 +3,12 @@ version 1.0
 
 task VariantPicking {
     input {
-        File inFileVcfSS
-        File inFileVcfMU
-        File inFileVcfM2
-        File inFileVcfLF
-        File inFileVcfVD
-        File infileVcfVS
+        File inFileVcfLofreq
+        File inFileVcfMutect2
+        File inFileVcfMuse
+        File inFileVcfSomaticsniper
+        File inFileVcfVardict
+        File inFileVcfVarscan
         File refFa
         String sampleName
     }
@@ -17,12 +17,12 @@ task VariantPicking {
         set -e -o pipefail
         python /usr/local/seqslab/omic variant-picking \
         --ref-fa ~{refFa} \
-        --somatic-sniper None \
-        --muse ~{inFileVcfMU} \
-        --mutect2 ~{inFileVcfM2} \
-        --lofreq ~{inFileVcfLF} \
-        --vardict None \
-        --varscan None \
+        --somatic-sniper ~{inFileVcfSomaticsniper} \
+        --muse ~{inFileVcfMuse} \
+        --mutect2 ~{inFileVcfMutect2} \
+        --lofreq ~{inFileVcfLofreq} \
+        --vardict ~{inFileVcfVardict} \
+        --varscan None ~{inFileVcfVarscan} \
         --output-vcf ~{sampleName}_picked.vcf \
         --min-snv-caller 1 \
         --min-indel-callers 1

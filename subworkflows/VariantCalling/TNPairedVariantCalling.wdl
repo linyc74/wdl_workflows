@@ -1,11 +1,8 @@
 version 1.0
 
-import "subworkflows/Somaticsniper.wdl" as somaticsniper
 import "subworkflows/Lofreq.wdl" as lofreq
-import "subworkflows/Muse.wdl" as muse
 import "subworkflows/Mutect2.wdl" as mutect2
-import "subworkflows/Vardict.wdl" as vardict
-import "subworkflows/Varscan.wdl" as varscan
+import "subworkflows/Muse.wdl" as muse
 
 
 workflow TNPairedVariantCalling {
@@ -27,17 +24,6 @@ workflow TNPairedVariantCalling {
         String normalSampleName
         String sampleName
     }
-    
-    call somaticsniper.Somaticsniper as bamsomaticsniper {
-        input:
-            inFileTumorBam = inFileTumorBam,
-            inFileNormalBam = inFileNormalBam,
-            refFa = refFa,
-            refFai = refFai,
-            tumorSampleName = tumorSampleName,
-            normalSampleName = normalSampleName,
-            sampleName = sampleName
-    }
 
     call lofreq.Lofreq as lofreq {
         input:
@@ -46,17 +32,6 @@ workflow TNPairedVariantCalling {
             inFileNormalBam = inFileNormalBam,
             inFileNormalBamIndex = inFileNormalBamIndex,
             inFileIntervalBed = inFileIntervalBed,
-            refFa = refFa,
-            refFai = refFai,
-            sampleName = sampleName
-    }
-
-    call muse.Muse as muse {
-        input:
-            inFileTumorBam = inFileTumorBam,
-            inFileTumorBamIndex = inFileTumorBamIndex,
-            inFileNormalBam = inFileNormalBam,
-            inFileNormalBamIndex = inFileNormalBamIndex,
             refFa = refFa,
             refFai = refFai,
             sampleName = sampleName
@@ -81,58 +56,30 @@ workflow TNPairedVariantCalling {
             sampleName = sampleName
     }
 
-    call vardict.Vardict as vardict {
+    call muse.Muse as muse {
         input:
             inFileTumorBam = inFileTumorBam,
             inFileTumorBamIndex = inFileTumorBamIndex,
             inFileNormalBam = inFileNormalBam,
             inFileNormalBamIndex = inFileNormalBamIndex,
-            inFileIntervalBed = inFileIntervalBed,
             refFa = refFa,
             refFai = refFai,
-            minimumAF = vardictMinimumAF,
-            tumorSampleName = tumorSampleName,
-            normalSampleName = normalSampleName,
             sampleName = sampleName
     }
- 
-    call varscan.Varscan as varscan {
-        input:
-            inFileTumorBam = inFileTumorBam,
-            inFileNormalBam = inFileNormalBam,
-            inFileIntervalBed = inFileIntervalBed,
-            refFa = refFa,
-            refFai = refFai,
-            tumorSampleName = tumorSampleName,
-            normalSampleName = normalSampleName,
-            sampleName = sampleName
-    }
- 
+
     output {
-        File outFileSomaticsniperVcfGz = bamsomaticsniper.outFileVcfGz
-        File outFileSomaticsniperVcfIndex = bamsomaticsniper.outFileVcfIndex
         File outFileLofreqVcfGz = lofreq.outFileVcfGz
         File outFileLofreqVcfIndex = lofreq.outFileVcfIndex
         File outFileMuseVcfGz = muse.outFileVcfGz
         File outFileMuseVcfIndex = muse.outFileVcfIndex
         File outFileMutect2VcfGz = mutect2.outFileVcfGz
         File outFileMutect2VcfIndex = mutect2.outFileVcfIndex
-        File outFileVardictVcfGz = vardict.outFileVcfGz
-        File outFileVardictVcfIndex = vardict.outFileVcfIndex
-        File outFileVarscanVcfGz = varscan.outFileVcfGz
-        File outFileVarscanVcfIndex = varscan.outFileVcfIndex
 
-        File outFileSomaticsniperFilteredVcfGz = bamsomaticsniper.outFileFilteredVcfGz
-        File outFileSomaticsniperFilteredVcfIndex = bamsomaticsniper.outFileFilteredVcfIndex
         File outFileLofreqFilteredVcfGz = lofreq.outFileFilteredVcfGz
         File outFileLofreqFilteredVcfIndex = lofreq.outFileFilteredVcfIndex
         File outFileMuseFilteredVcfGz = muse.outFileFilteredVcfGz
         File outFileMuseFilteredVcfIndex = muse.outFileFilteredVcfIndex
         File outFileMutect2FilteredVcfGz = mutect2.outFileFilteredVcfGz
         File outFileMutect2FilteredVcfIndex = mutect2.outFileFilteredVcfIndex
-        File outFileVardictFilteredVcfGz = vardict.outFileFilteredVcfGz
-        File outFileVardictFilteredVcfIndex = vardict.outFileFilteredVcfIndex
-        File outFileVarscanFilteredVcfGz = varscan.outFileFilteredVcfGz
-        File outFileVarscanFilteredVcfIndex = varscan.outFileFilteredVcfIndex
     }
 }

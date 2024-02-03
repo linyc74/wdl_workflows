@@ -103,12 +103,12 @@ workflow SomaticPipelineTumorNormalMode {
 
         call pick.VariantPicking as variantPicking {
             input:
-                inFileVcfSS = variantCalling.outFileSomaticsniperFilteredVcfGz,
-                inFileVcfMU = variantCalling.outFileMuseFilteredVcfGz,
-                inFileVcfM2 = variantCalling.outFileMutect2FilteredVcfGz,
-                inFileVcfLF = variantCalling.outFileLofreqFilteredVcfGz,
-                inFileVcfVD = variantCalling.outFileVardictFilteredVcfGz,
-                infileVcfVS = variantCalling.outFileVarscanFilteredVcfGz,
+                inFileVcfLofreq = variantCalling.outFileLofreqFilteredVcfGz,
+                inFileVcfMutect2 = variantCalling.outFileMutect2FilteredVcfGz,
+                inFileVcfMuse = variantCalling.outFileMuseFilteredVcfGz,
+                inFileVcfSomaticsniper = "None",
+                inFileVcfVardict = "None",
+                inFileVcfVarscan = "None",
                 refFa = refFa,
                 sampleName = finalOutputName
         }
@@ -140,18 +140,12 @@ workflow SomaticPipelineTumorNormalMode {
         Array[File] outFileTumorBamStats = tumorBamStats.outFileBamStats
         Array[File] outFileNormalBamStats = normalBamStats.outFileBamStats
 
-        Array[File] outFileSomaticsniperFilteredVcfGz = variantCalling.outFileSomaticsniperFilteredVcfGz
-        Array[File] outFileSomaticsniperFilteredVcfIndex = variantCalling.outFileSomaticsniperFilteredVcfIndex
         Array[File] outFileLofreqFilteredVcfGz = variantCalling.outFileLofreqFilteredVcfGz
         Array[File] outFileLofreqFilteredVcfIndex = variantCalling.outFileLofreqFilteredVcfIndex
-        Array[File] outFileMuseFilteredVcfGz = variantCalling.outFileMuseFilteredVcfGz
-        Array[File] outFileMuseFilteredVcfIndex = variantCalling.outFileMuseFilteredVcfIndex
         Array[File] outFileMutect2FilteredVcfGz = variantCalling.outFileMutect2FilteredVcfGz
         Array[File] outFileMutect2FilteredVcfIndex = variantCalling.outFileMutect2FilteredVcfIndex
-        Array[File] outFileVardictFilteredVcfGz = variantCalling.outFileVardictFilteredVcfGz
-        Array[File] outFileVardictFilteredVcfIndex = variantCalling.outFileVardictFilteredVcfIndex
-        Array[File] outFileVarscanFilteredVcfGz = variantCalling.outFileVarscanFilteredVcfGz
-        Array[File] outFileVarscanFilteredVcfIndex = variantCalling.outFileVarscanFilteredVcfIndex
+        Array[File] outFileMuseFilteredVcfGz = variantCalling.outFileMuseFilteredVcfGz
+        Array[File] outFileMuseFilteredVcfIndex = variantCalling.outFileMuseFilteredVcfIndex
 
         Array[File] outFilePCGRannotatedVcf = variantAnnotation.outFilePCGRannotatedVcf
         Array[File] outFilePCGRannotatedVcfIndex = variantAnnotation.outFilePCGRannotatedVcfIndex

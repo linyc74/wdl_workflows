@@ -3,7 +3,7 @@ Download `womtool-86.jar` from https://github.com/broadinstitute/cromwell/releas
 ### Validate
 
 ```bash
-java -jar womtool-86.jar validate SomaticPipelineTumorNormalMode.wdl
+java -jar womtool-86.jar validate workflow.wdl
 ```
 
 ### Visualize
@@ -17,5 +17,5 @@ sudo apt install graphviz
 Visualize the workflow as a graph in PNG format
 
 ```bash
-java -jar womtool-86.jar graph SomaticPipelineTumorNormalMode.wdl | dot -Tpng > SomaticPipelineTumorNormalMode.png
+java -jar womtool-86.jar graph workflow.wdl | dot -Tpng > workflow.png
 ```
