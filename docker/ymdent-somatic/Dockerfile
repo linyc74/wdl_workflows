@@ -17,18 +17,25 @@ RUN apt-get update && \
     libntirpc-dev \
     git \
     unzip \
-    cmake
+    cmake \
+    build-essential
 
 
-# Remove old tabix version, new tabix will be installed when install htslib v1.11
+# Remove old tabix, new tabix will be installed with htslib
 RUN apt-get remove -y tabix
 
 
-RUN python3 -m pip install pandas==1.3.5
+RUN cd /usr/local/seqslab \
+    && wget https://github.com/arq5x/bedtools2/releases/download/v2.31.1/bedtools-2.31.1.tar.gz \
+    && tar -zxvf bedtools-2.31.1.tar.gz \
+    && rm bedtools-2.31.1.tar.gz \
+    && cd bedtools2 \
+    && make \
+    && ln -sr ./bin/* /usr/local/bin
 
 
-# Link python3 to python
-RUN ln -s /usr/bin/python3 /usr/bin/python
+RUN ln -s /usr/bin/python3 /usr/bin/python \
+ && python -m pip install pandas==1.3.5
 
 
 RUN wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc \
@@ -92,42 +99,8 @@ RUN cd /usr/local/seqslab \
 RUN cd /usr/local/seqslab \
     && wget https://github.com/CSB5/lofreq/raw/master/dist/lofreq_star-2.1.5_linux-x86-64.tgz \
     && tar -xzf lofreq_star-2.1.5_linux-x86-64.tgz \
-    && rm lofreq_star-2.1.5_linux-x86-64.tgz \
+    && rm lofreq_star-2.1.5_linux-x866663636-64.tgz \
     && mv lofreq_star-2.1.5_linux-x86-64/bin/* /usr/local/bin
-
-
-RUN cd /usr/local/seqslab \
-    && wget https://github.com/arq5x/bedtools2/releases/download/v2.30.0/bedtools-2.30.0.tar.gz \
-    && tar -zxvf bedtools-2.30.0.tar.gz \
-    && rm bedtools-2.30.0.tar.gz \
-    && cd bedtools2 \
-    && make \
-    && ln -sr ./bin/* /usr/local/bin
-
-
-# Install Mamaba and PCGR
-ARG MINI_VERSION=4.11.0-0
-ARG MINI_URL=https://github.com/conda-forge/miniforge/releases/download/${MINI_VERSION}/Mambaforge-${MINI_VERSION}-Linux-x86_64.sh
-
-RUN curl --silent -L "${MINI_URL}" -o "mambaforge.sh" && \
-    /bin/bash mambaforge.sh -b -p /opt/mambaforge/ && \
-    rm mambaforge.sh
-
-ENV PATH="/opt/mambaforge/bin:$PATH"
-
-ENV PCGR_VERSION="1.1.0"
-ENV PCGR_REPO="https://raw.githubusercontent.com/sigven/pcgr/v${PCGR_VERSION}/conda/env/lock/"
-ENV PLATFORM="linux"
-
-RUN mamba create --name pcgr --file ${PCGR_REPO}/pcgr-${PLATFORM}-64.lock && \
-    mamba create --name pcgrr --file ${PCGR_REPO}/pcgrr-${PLATFORM}-64.lock && \
-    mamba clean --all --force-pkgs-dirs --yes
-
-ARG PCGR_ENV_NAME="pcgr"
-
-# pcgr env is activated by default
-ENV PATH="/opt/mambaforge/envs/${PCGR_ENV_NAME}/bin:${PATH}"
-ENV CONDA_PREFIX="/opt/mambaforge/envs/${PCGR_ENV_NAME}"
 
 
 RUN cd /usr/local/seqslab \
