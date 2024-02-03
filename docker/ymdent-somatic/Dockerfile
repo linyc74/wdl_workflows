@@ -90,31 +90,10 @@ RUN cd /usr/local/seqslab \
 
 
 RUN cd /usr/local/seqslab \
-    && wget https://github.com/AstraZeneca-NGS/VarDictJava/releases/download/v1.8.3/VarDict-1.8.3.tar \
-    && tar xvf VarDict-1.8.3.tar \
-    && rm VarDict-1.8.3.tar \
-    && cd VarDict-1.8.3 \
-    && ln -sr ./bin/* /usr/local/bin
-
-
-RUN cd /usr/local/seqslab \
     && wget https://github.com/CSB5/lofreq/raw/master/dist/lofreq_star-2.1.5_linux-x86-64.tgz \
     && tar -xzf lofreq_star-2.1.5_linux-x86-64.tgz \
     && rm lofreq_star-2.1.5_linux-x86-64.tgz \
     && mv lofreq_star-2.1.5_linux-x86-64/bin/* /usr/local/bin
-
-
-RUN cd /usr/local/seqslab \
-    && wget https://github.com/genome/somatic-sniper/archive/refs/tags/v1.0.5.0.tar.gz \
-    && tar zxvf v1.0.5.0.tar.gz \
-    && rm v1.0.5.0.tar.gz \
-    && cd somatic-sniper-1.0.5.0 \
-    && mkdir build \
-    && cd build \
-    && cmake ../ \
-    && make deps \
-    && make -j \
-    && ln -s `pwd`/bin/bam-somaticsniper /usr/local/bin
 
 
 RUN cd /usr/local/seqslab \
@@ -124,10 +103,6 @@ RUN cd /usr/local/seqslab \
     && cd bedtools2 \
     && make \
     && ln -sr ./bin/* /usr/local/bin
-
-
-RUN cd /usr/local/seqslab \
-    && wget https://sourceforge.net/projects/varscan/files/VarScan.v2.3.7.jar
 
 
 # Install Mamaba and PCGR
