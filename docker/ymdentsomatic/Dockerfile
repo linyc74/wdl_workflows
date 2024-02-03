@@ -57,15 +57,15 @@ RUN cd /usr/local/seqslab \
 
 
 RUN cd /usr/local/seqslab \
-    && wget https://github.com/samtools/htslib/releases/download/1.11/htslib-1.11.tar.bz2 \
+    && wget https://github.com/samtools/htslib/releases/download/1.11/htslib-1.19.1.tar.bz2 \
     && wget https://github.com/samtools/samtools/releases/download/1.11/samtools-1.11.tar.bz2 \
     && wget https://github.com/samtools/bcftools/releases/download/1.8/bcftools-1.8.tar.bz2 \
-    && tar jxvf htslib-1.11.tar.bz2 \
+    && tar jxvf htslib-1.19.1.tar.bz2 \
     && tar jxvf samtools-1.11.tar.bz2 \
     && tar jxvf bcftools-1.8.tar.bz2 \
-    && rm htslib-1.11.tar.bz2 samtools-1.11.tar.bz2 bcftools-1.8.tar.bz2 \
-    && cd htslib-1.11 \
-    && ./configure && make && make install && cd .. && rm -r htslib-1.11 \
+    && rm htslib-1.19.1.tar.bz2 samtools-1.11.tar.bz2 bcftools-1.8.tar.bz2 \
+    && cd htslib-1.19.1 \
+    && ./configure && make && make install && cd .. && rm -r htslib-1.19.1 \
     && cd bcftools-1.8 \
     && ./configure && make && make install && cd .. && rm -r bcftools-1.8 \
     && cd samtools-1.11 \
