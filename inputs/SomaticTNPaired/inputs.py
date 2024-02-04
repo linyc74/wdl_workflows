@@ -6,7 +6,7 @@ from typing import Dict, Any
 class Main:
 
     TEMPLATE_JSON = 'template.json'
-    SAMPLE_SHEET = 'sample-sheet.csv'
+    SAMPLES_CSV = 'samples.csv'
     R1_SUFFIX = '_R1.fastq.gz'
     R2_SUFFIX = '_R2.fastq.gz'
 
@@ -20,7 +20,7 @@ class Main:
 
     def read_files(self):
         self.inputs = json.load(open(self.TEMPLATE_JSON))
-        self.df = pd.read_csv(self.SAMPLE_SHEET)
+        self.df = pd.read_csv(self.SAMPLES_CSV)
 
     def fill_in_samples(self):
         normal_names = self.df['Normal Sample Name'].tolist()
