@@ -39,6 +39,8 @@ class Main:
         self.inputs['SomaticTNPaired.inFileTumorFastqs'] = tumor_fastqs
         self.inputs['SomaticTNPaired.finalOutputNames'] = tumor_names
 
+        self.inputs['SomaticTNPaired.inFileIntervalBeds'] = self.df['BED File'].tolist()
+
     def write_json(self):
         with open('inputs.json', 'w') as f:
             json.dump(self.inputs, f, indent=4)

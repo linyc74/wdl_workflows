@@ -1,38 +1,41 @@
 {
-  "SomaticTNPaired.normalSampleNames": [
-    "01_N",
-    "02_N"
-  ],
-  "SomaticTNPaired.inFileNormalFastqs": [
-    ["01_N_R1.fastq.gz", "01_N_R2.fastq.gz"],
-    ["02_N_R1.fastq.gz", "02_N_R2.fastq.gz"]
-  ],
-  "SomaticTNPaired.tumorSampleNames": [
-    "01_T",
-    "02_T"
-  ],
-  "SomaticTNPaired.inFileTumorFastqs": [
-    ["01_T_R1.fastq.gz", "01_T_R2.fastq.gz"],
-    ["02_T_R1.fastq.gz", "02_T_R2.fastq.gz"]
-  ],
-  "SomaticTNPaired.finalOutputNames": [
-    "01_T",
-    "02_T"
-  ],
-  "SomaticTNPaired.refFa": "ref.fa",
-  "SomaticTNPaired.refFai": "ref.fa.fai",
-  "SomaticTNPaired.refDict": "ref.fa.dict",
-  "SomaticTNPaired.refAmb": "ref.fa.amb",
-  "SomaticTNPaired.refAnn": "ref.fa.ann",
-  "SomaticTNPaired.refBwt": "ref.fa.bwt",
-  "SomaticTNPaired.refPac": "ref.fa.pac",
-  "SomaticTNPaired.refSa": "ref.fa.sa",
-  "SomaticTNPaired.inFileDbsnpVcf": "dbsnp.vcf.gz",
-  "SomaticTNPaired.inFileDbsnpVcfIndex": "dbsnp.vcf.gz.tbi",
-  "SomaticTNPaired.inFileGermlineResource": "germline-resource.vcf.gz",
-  "SomaticTNPaired.inFileGermlineResourceIndex": "germline-resource.vcf.gz.tbi",
-  "SomaticTNPaired.inFilePON": "pon.vcf.gz",
-  "SomaticTNPaired.inFilePONindex": "pon.vcf.gz.tbi",
-  "SomaticTNPaired.inDirPCGRref": "pcgr-data",
-  "SomaticTNPaired.inFileIntervalBed": "exome.bed"
+    "SomaticTNPaired.normalSampleNames": [
+        "01_N",
+        "02_N"
+    ],
+    "SomaticTNPaired.inFileNormalFastqs": [
+        ["01_N_R1.fastq.gz", "01_N_R2.fastq.gz"],
+        ["02_N_R1.fastq.gz", "02_N_R2.fastq.gz"]
+    ],
+    "SomaticTNPaired.tumorSampleNames": [
+        "01_T",
+        "02_T"
+    ],
+    "SomaticTNPaired.inFileTumorFastqs": [
+        ["01_T_R1.fastq.gz", "01_T_R2.fastq.gz"],
+        ["02_T_R1.fastq.gz", "02_T_R2.fastq.gz"]
+    ],
+    "SomaticTNPaired.inFileIntervalBeds": [
+        "SureSelect.bed",
+        "KAPA.bed"
+    ],
+    "SomaticTNPaired.finalOutputNames": [
+        "01_T",
+        "02_T"
+    ],
+    "SomaticTNPaired.refFa": "ref.fa",
+    "SomaticTNPaired.refFai": "ref.fa.fai",
+    "SomaticTNPaired.refDict": "ref.fa.dict",
+    "SomaticTNPaired.refAmb": "ref.fa.amb",
+    "SomaticTNPaired.refAnn": "ref.fa.ann",
+    "SomaticTNPaired.refBwt": "ref.fa.bwt",
+    "SomaticTNPaired.refPac": "ref.fa.pac",
+    "SomaticTNPaired.refSa": "ref.fa.sa",
+    "SomaticTNPaired.inFileDbsnpVcf": "dbsnp.vcf.gz",
+    "SomaticTNPaired.inFileDbsnpVcfIndex": "dbsnp.vcf.gz.tbi",
+    "SomaticTNPaired.inFileGermlineResource": "germline-resource.vcf.gz",
+    "SomaticTNPaired.inFileGermlineResourceIndex": "germline-resource.vcf.gz.tbi",
+    "SomaticTNPaired.inFilePON": "pon.vcf.gz",
+    "SomaticTNPaired.inFilePONindex": "pon.vcf.gz.tbi",
+    "SomaticTNPaired.inDirPCGRref": "pcgr-data"
 }

@@ -11,9 +11,9 @@ workflow SomaticPipelineTumorNormalMode {
     input {
         Array[Array[File]] inFileTumorFastqs
         Array[Array[File]] inFileNormalFastqs
+        Array[File] inFileIntervalBeds
         File inFileDbsnpVcf
         File inFileDbsnpVcfIndex
-        File inFileIntervalBed
         File inFileGermlineResource
         File inFileGermlineResourceIndex
         File inFilePON
@@ -35,6 +35,7 @@ workflow SomaticPipelineTumorNormalMode {
     scatter (i in range(length(finalOutputNames))) {
         Array[File] iFTFs = inFileTumorFastqs[i]
         Array[File] iFNFs = inFileNormalFastqs[i]
+        File inFileIntervalBed = inFileIntervalBeds[i]
         String tumorSampleName = tumorSampleNames[i]
         String normalSampleName = normalSampleNames[i]
         String finalOutputName = finalOutputNames[i]

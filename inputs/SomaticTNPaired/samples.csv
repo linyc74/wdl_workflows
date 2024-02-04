@@ -1,4 +1,4 @@
-Normal Sample Name,Tumor Sample Name
-01N, 01T
-02N, 02T
-03N, 03T
+Normal Sample Name,Tumor Sample Name,BED File
+01N,01T,SureSelect.bed
+02N,02T,SureSelect.bed
+03N,03T,KAPA.bed
