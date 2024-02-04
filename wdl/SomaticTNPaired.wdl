@@ -117,7 +117,6 @@ workflow SomaticTNPaired {
         call annot.Annotate as variantAnnotation {
             input:
                 inFileVcfGz = variantPicking.outFileVcfGz,
-                inFileVcfIndex = variantPicking.outFileVcfIndex,
                 inDirPCGRref = inDirPCGRref,
                 sampleName = finalOutputName
         }

@@ -4,7 +4,6 @@ version 1.0
 workflow Annotate {
     input {
         File inFileVcfGz
-        File inFileVcfIndex
         File inDirPCGRref
         String sampleName
     }
@@ -12,7 +11,6 @@ workflow Annotate {
     call PCGR {
         input:
             inFileVcfGz = inFileVcfGz,
-            inFileVcfIndex = inFileVcfIndex,
             inDirPCGRref = inDirPCGRref,
             sampleName = sampleName
     }
@@ -37,7 +35,6 @@ workflow Annotate {
 task PCGR {
     input {
         File inFileVcfGz
-        File inFileVcfIndex
         File inDirPCGRref
         String sampleName
     }
