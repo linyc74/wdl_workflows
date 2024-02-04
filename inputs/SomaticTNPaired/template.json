@@ -25,7 +25,7 @@
     ],
     "SomaticTNPaired.refFa": "ref.fa",
     "SomaticTNPaired.refFai": "ref.fa.fai",
-    "SomaticTNPaired.refDict": "ref.fa.dict",
+    "SomaticTNPaired.refDict": "ref.dict",
     "SomaticTNPaired.refAmb": "ref.fa.amb",
     "SomaticTNPaired.refAnn": "ref.fa.ann",
     "SomaticTNPaired.refBwt": "ref.fa.bwt",
