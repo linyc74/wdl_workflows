@@ -7,7 +7,7 @@ import "subworkflows/VariantPicking.wdl" as pick
 import "subworkflows/Annotate.wdl" as annot
 
 
-workflow SomaticPipelineTumorNormalMode {
+workflow SomaticTNPaired {
     input {
         Array[Array[File]] inFileTumorFastqs
         Array[Array[File]] inFileNormalFastqs
