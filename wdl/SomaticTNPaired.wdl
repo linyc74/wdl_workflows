@@ -104,14 +104,11 @@ workflow SomaticTNPaired {
 
         call pick.VariantPicking as variantPicking {
             input:
+                refFa = refFa,
+                sampleName = finalOutputName,
                 inFileVcfLofreq = variantCalling.outFileLofreqFilteredVcfGz,
                 inFileVcfMutect2 = variantCalling.outFileMutect2FilteredVcfGz,
-                inFileVcfMuse = variantCalling.outFileMuseFilteredVcfGz,
-                inFileVcfSomaticsniper = "None",
-                inFileVcfVardict = "None",
-                inFileVcfVarscan = "None",
-                refFa = refFa,
-                sampleName = finalOutputName
+                inFileVcfMuse = variantCalling.outFileMuseFilteredVcfGz
         }
 
         call annot.Annotate as variantAnnotation {
