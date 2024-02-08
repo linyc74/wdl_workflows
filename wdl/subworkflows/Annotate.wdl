@@ -86,7 +86,7 @@ task Vcf2Csv {
     command <<<
         set -e -o pipefail
         python /usr/local/seqslab/omic vcf2csv \
-        --input-vcf ~{inFileVcfGz}
+        --input-vcf ~{inFileVcfGz} \
         --output-csv ~{sampleName}.csv
     >>>
 
