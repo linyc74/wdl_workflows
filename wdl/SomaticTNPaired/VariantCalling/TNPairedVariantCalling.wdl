@@ -1,8 +1,8 @@
 version 1.0
 
-import "subworkflows/Lofreq.wdl" as lofreq
-import "subworkflows/Mutect2.wdl" as mutect2
-import "subworkflows/Muse.wdl" as muse
+import "Lofreq.wdl" as lofreq
+import "Mutect2.wdl" as mutect2
+import "Muse.wdl" as muse
 
 
 workflow TNPairedVariantCalling {

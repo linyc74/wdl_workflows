@@ -1,7 +1,7 @@
 version 1.0
 
-import "subworkflows/TrimAndMapping.wdl" as trimAndMapping
-import "subworkflows/PostMapping.wdl" as postMapping
+import "TrimAndMapping.wdl" as trimAndMapping
+import "PostMapping.wdl" as postMapping
 
 
 workflow TNPairedMapping {

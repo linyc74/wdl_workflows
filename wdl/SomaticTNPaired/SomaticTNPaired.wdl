@@ -1,10 +1,10 @@
 version 1.0
 
-import "subworkflows/GeneralTask.wdl" as general
-import "subworkflows/Mapping/TNPairedMapping.wdl" as mapper
-import "subworkflows/VariantCalling/TNPairedVariantCalling.wdl" as caller
-import "subworkflows/VariantPicking.wdl" as pick
-import "subworkflows/Annotate.wdl" as annot
+import "GeneralTask.wdl" as general
+import "Mapping/TNPairedMapping.wdl" as mapper
+import "VariantCalling/TNPairedVariantCalling.wdl" as caller
+import "VariantPicking.wdl" as pick
+import "Annotate.wdl" as annot
 
 
 workflow SomaticTNPaired {
