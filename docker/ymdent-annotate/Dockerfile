@@ -48,10 +48,34 @@ RUN mamba create --name pcgr --file ${PCGR_REPO}/pcgr-${PLATFORM}-64.lock && \
     mamba clean --all --force-pkgs-dirs --yes
 
 ARG PCGR_ENV_NAME="pcgr"
-
-# pcgr env is activated by default
 ENV PATH="/opt/mambaforge/envs/${PCGR_ENV_NAME}/bin:${PATH}"
 ENV CONDA_PREFIX="/opt/mambaforge/envs/${PCGR_ENV_NAME}"
+
+
+RUN apt-get update \
+ && apt-get install -y \
+    unzip \
+    tar \
+    git \
+    cpanminus \
+    build-essential \
+    libbz2-dev \
+    liblzma-dev \
+    zlib1g-dev \
+    libdbi-perl \
+    libdbd-mysql-perl \
+    libmysqlclient-dev \
+ && cpanm DBI \
+ && cpanm Archive::Zip \
+ && cpanm DBD::mysql \
+ && cpanm Module::Build \
+ && cpanm --force Bio::Root::Version \
+ && cd /opt \
+ && git clone -b release/110.1 --single-branch https://github.com/Ensembl/ensembl-vep.git \
+ && cd ensembl-vep \
+ && perl INSTALL.pl --AUTO ap --PLUGINS all --NO_UPDATE
+
+ENV PATH="/opt/ensembl-vep:${PATH}"
 
 
 RUN cd /usr/local/seqslab \

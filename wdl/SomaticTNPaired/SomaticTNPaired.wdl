@@ -84,7 +84,7 @@ workflow SomaticTNPaired {
                 normalSampleName = normalSampleName
         }
 
-        call annot.Annotate as variantAnnotation {
+        call annot.Annotate as annotate {
             input:
                 inFileVcfGz = variantCalling.outFilePickedVcfGz,
                 inFileVcfIndex = variantCalling.outFilePickedVcfIndex,
@@ -99,10 +99,8 @@ workflow SomaticTNPaired {
     output {
         Array[Array[File]] outFileTumorTrimmedFastqs = preprocessing.outFileTumorTrimmedFastqs
         Array[Array[File]] outFileNormalTrimmedFastqs = preprocessing.outFileNormalTrimmedFastqs
-
         Array[File] outFileTumorBam = preprocessing.outFileTumorBam
         Array[File] outFileNormalBam = preprocessing.outFileNormalBam
-
         Array[File] outFileTumorSortedRawBam = preprocessing.outFileTumorSortedRawBam
         Array[File] outFileNormalSortedRawBam = preprocessing.outFileNormalSortedRawBam
 
@@ -116,12 +114,11 @@ workflow SomaticTNPaired {
         Array[File] outFileMuseFilteredVcfGz = variantCalling.outFileMuseFilteredVcfGz
         Array[File] outFilePickedVcfGz = variantCalling.outFilePickedVcfGz
 
-        Array[File] outFileVepVcfGz = variantAnnotation.outFileVepVcfGz
-        Array[File] outFileVepMaf = variantAnnotation.outFileVepMaf
-        Array[File] outFileVepCsv = variantAnnotation.outFileVepCsv
-
-        Array[File] outFilePcgrVcfGz = variantAnnotation.outFilePcgrVcfGz
-        Array[File] outFilePcgrFlexdbHtml = variantAnnotation.outFilePcgrFlexdbHtml
-        Array[File] outFilePcgrHtml = variantAnnotation.outFilePcgrHtml
+        Array[File] outFileVepVcfGz = annotate.outFileVepVcfGz
+        Array[File] outFileVepMaf = annotate.outFileVepMaf
+        Array[File] outFileVepCsv = annotate.outFileVepCsv
+        Array[File] outFilePcgrVcfGz = annotate.outFilePcgrVcfGz
+        Array[File] outFilePcgrFlexdbHtml = annotate.outFilePcgrFlexdbHtml
+        Array[File] outFilePcgrHtml = annotate.outFilePcgrHtml
     }
 }
