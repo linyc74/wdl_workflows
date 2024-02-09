@@ -23,7 +23,6 @@ workflow VariantCalling {
         Float vardictMinimumAF
         String tumorSampleName
         String normalSampleName
-        String sampleName
     }
 
     call lofreq.Lofreq as lofreq {
@@ -35,7 +34,7 @@ workflow VariantCalling {
             inFileIntervalBed = inFileIntervalBed,
             refFa = refFa,
             refFai = refFai,
-            sampleName = sampleName
+            sampleName = tumorSampleName
     }
 
     call mutect2.Mutect2 as mutect2 {
@@ -54,7 +53,7 @@ workflow VariantCalling {
             refDict = refDict,
             tumorSampleName = tumorSampleName,
             normalSampleName = normalSampleName,
-            sampleName = sampleName
+            sampleName = tumorSampleName
     }
 
     call muse.Muse as muse {
@@ -65,7 +64,7 @@ workflow VariantCalling {
             inFileNormalBamIndex = inFileNormalBamIndex,
             refFa = refFa,
             refFai = refFai,
-            sampleName = sampleName
+            sampleName = tumorSampleName
     }
 
     call general.VariantPicking as variantPicking {

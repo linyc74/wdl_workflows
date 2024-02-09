@@ -8,8 +8,8 @@ import "Annotate.wdl" as annot
 
 workflow SomaticTNPaired {
     input {
-        Array[Array[File]] inFileTumorFastqs
-        Array[Array[File]] inFileNormalFastqs
+        Array[Array[File]] inFileTumorFastqPairs
+        Array[Array[File]] inFileNormalFastqPairs
         Array[File] inFileIntervalBeds
         File inFileDbsnpVcf
         File inFileDbsnpVcfIndex
@@ -29,21 +29,19 @@ workflow SomaticTNPaired {
         File refDict
         Array[String] tumorSampleNames
         Array[String] normalSampleNames
-        Array[String] finalOutputNames
     }
 
-    scatter (i in range(length(finalOutputNames))) {
-        Array[File] iFTFs = inFileTumorFastqs[i]
-        Array[File] iFNFs = inFileNormalFastqs[i]
+    scatter (i in range(length(tumorSampleNames))) {
+        Array[File] inFileTumorFastqPair = inFileTumorFastqPairs[i]
+        Array[File] inFileNormalFastqPair = inFileNormalFastqPairs[i]
         File inFileIntervalBed = inFileIntervalBeds[i]
         String tumorSampleName = tumorSampleNames[i]
         String normalSampleName = normalSampleNames[i]
-        String finalOutputName = finalOutputNames[i]
 
         call prep.Preprocessing as preprocessing {
             input:
-                inFileTumorFastqs = iFTFs,
-                inFileNormalFastqs = iFNFs,
+                inFileTumorFastqPair = inFileTumorFastqPair,
+                inFileNormalFastqPair = inFileNormalFastqPair,
                 inFileDbsnpVcf = inFileDbsnpVcf,
                 inFileDbsnpVcfIndex = inFileDbsnpVcfIndex,
                 refAmb = refAmb,
@@ -60,12 +58,10 @@ workflow SomaticTNPaired {
 
         call qc.QCStats as qcstats {
             input:
-                inFileTumorFastqR1 = iFTFs[0],
-                inFileTumorFastqR2 = iFTFs[1],
+                inFileTumorFastqPair = inFileTumorFastqPair,
                 inFileTumorBam = preprocessing.outFileTumorBam,
                 tumorSampleName = tumorSampleName,
-                inFileNormalFastqR1 = iFNFs[0],
-                inFileNormalFastqR2 = iFNFs[1],
+                inFileNormalFastqPair = inFileNormalFastqPair,
                 inFileNormalBam = preprocessing.outFileNormalBam,
                 normalSampleName = normalSampleName
         }
@@ -85,8 +81,7 @@ workflow SomaticTNPaired {
                 refFai = refFai,
                 refDict = refDict,
                 tumorSampleName = tumorSampleName,
-                normalSampleName = normalSampleName,
-                sampleName = finalOutputName
+                normalSampleName = normalSampleName
         }
 
         call annot.Annotate as variantAnnotation {
@@ -107,8 +102,6 @@ workflow SomaticTNPaired {
 
         Array[File] outFileTumorBam = preprocessing.outFileTumorBam
         Array[File] outFileNormalBam = preprocessing.outFileNormalBam
-        Array[File] outFileTumorBamIndex = preprocessing.outFileTumorBamIndex
-        Array[File] outFileNormalBamIndex = preprocessing.outFileNormalBamIndex
 
         Array[File] outFileTumorSortedRawBam = preprocessing.outFileTumorSortedRawBam
         Array[File] outFileNormalSortedRawBam = preprocessing.outFileNormalSortedRawBam

@@ -3,28 +3,26 @@ version 1.0
 
 workflow QCStats {
     input {
-        File inFileTumorFastqR1
-        File inFileTumorFastqR2
+        Array[File] inFileTumorFastqPair
         File inFileTumorBam
         String tumorSampleName
 
-        File inFileNormalFastqR1
-        File inFileNormalFastqR2
+        Array[File] inFileNormalFastqPair
         File inFileNormalBam
         String normalSampleName
     }
 
     call FastQC as tumorFastqc {
         input:
-            inFileFastqR1 = inFileTumorFastqR1,
-            inFileFastqR2 = inFileTumorFastqR2,
+            inFileFastqR1 = inFileTumorFastqPair[0],
+            inFileFastqR2 = inFileTumorFastqPair[1],
             sampleName = tumorSampleName
     }
 
     call FastQC as normalFastqc {
         input:
-            inFileFastqR1 = inFileNormalFastqR1,
-            inFileFastqR2 = inFileNormalFastqR2,
+            inFileFastqR1 = inFileNormalFastqPair[0],
+            inFileFastqR2 = inFileNormalFastqPair[1],
             sampleName = normalSampleName
     }
 

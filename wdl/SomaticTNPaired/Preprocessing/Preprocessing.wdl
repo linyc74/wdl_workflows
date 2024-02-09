@@ -6,8 +6,8 @@ import "PostMapping.wdl" as postMapping
 
 workflow Preprocessing {
     input {
-        Array[File] inFileTumorFastqs
-        Array[File] inFileNormalFastqs
+        Array[File] inFileTumorFastqPair
+        Array[File] inFileNormalFastqPair
         File inFileDbsnpVcf
         File inFileDbsnpVcfIndex
         File refAmb
@@ -32,7 +32,7 @@ workflow Preprocessing {
             refFa = refFa,
             refFai = refFai,
             sampleName = tumorSampleName,
-            inFileFastqs = inFileTumorFastqs
+            inFileFastqs = inFileTumorFastqPair
     }
 
     call trimAndMapping.TrimAndMapping as trimAndMapNormal {
@@ -45,7 +45,7 @@ workflow Preprocessing {
             refFa = refFa,
             refFai = refFai,
             sampleName = normalSampleName,
-            inFileFastqs = inFileNormalFastqs
+            inFileFastqs = inFileNormalFastqPair
     }
 
     call postMapping.PostMapping as postMappingTumor {
