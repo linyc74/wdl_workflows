@@ -22,7 +22,7 @@ workflow Annotate {
             inFileVcfGz = inFileVcfGz,
             inFileVcfIndex = inFileVcfIndex,
             refFa = refFa,
-            refVepCacheDir = UnzipVep.refVepCacheDir,
+            inDirVepCache = UnzipVep.outDirVepCache,
             tumorSampleName = tumorSampleName,
             normalSampleName = normalSampleName
     }
@@ -61,7 +61,7 @@ task UnzipVep {
     >>>
 
     output {
-        File refVepCacheDir = "./vep-cache"
+        File outDirVepCache = "./vep-cache"
     }
 
     runtime {
@@ -75,7 +75,7 @@ task VEP {
         File inFileVcfGz
         File inFileVcfIndex
         File refFa
-        File refVepCacheDir
+        File inDirVepCache
         String tumorSampleName
         String normalSampleName
     }
@@ -86,7 +86,7 @@ task VEP {
           --offline \
           --input_file ~{inFileVcfGz} \
           --fasta ~{refFa} \
-          --dir_cache ~{refVepCacheDir} \
+          --dir_cache ~{inDirVepCache} \
           --merged \
           --everything \
           --fork 1 \
