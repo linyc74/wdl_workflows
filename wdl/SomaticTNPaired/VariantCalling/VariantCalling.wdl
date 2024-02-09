@@ -20,7 +20,6 @@ workflow VariantCalling {
         File refFa
         File refFai
         File refDict
-        Float vardictMinimumAF
         String tumorSampleName
         String normalSampleName
     }

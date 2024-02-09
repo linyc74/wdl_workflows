@@ -1,27 +1,23 @@
 {
-    "SomaticTNPaired.normalSampleNames": [
-        "01_N",
-        "02_N"
-    ],
-    "SomaticTNPaired.inFileNormalFastqs": [
-        ["01_N_R1.fastq.gz", "01_N_R2.fastq.gz"],
-        ["02_N_R1.fastq.gz", "02_N_R2.fastq.gz"]
-    ],
     "SomaticTNPaired.tumorSampleNames": [
         "01_T",
         "02_T"
     ],
-    "SomaticTNPaired.inFileTumorFastqs": [
+    "SomaticTNPaired.inFileTumorFastqPairs": [
         ["01_T_R1.fastq.gz", "01_T_R2.fastq.gz"],
         ["02_T_R1.fastq.gz", "02_T_R2.fastq.gz"]
+    ],
+    "SomaticTNPaired.normalSampleNames": [
+        "01_N",
+        "02_N"
+    ],
+    "SomaticTNPaired.inFileNormalFastqPairs": [
+        ["01_N_R1.fastq.gz", "01_N_R2.fastq.gz"],
+        ["02_N_R1.fastq.gz", "02_N_R2.fastq.gz"]
     ],
     "SomaticTNPaired.inFileIntervalBeds": [
         "SureSelect.bed",
         "KAPA.bed"
-    ],
-    "SomaticTNPaired.finalOutputNames": [
-        "01_T",
-        "02_T"
     ],
     "SomaticTNPaired.refFa": "ref.fa",
     "SomaticTNPaired.refFai": "ref.fa.fai",
@@ -37,5 +33,6 @@
     "SomaticTNPaired.inFileGermlineResourceIndex": "germline-resource.vcf.gz.tbi",
     "SomaticTNPaired.inFilePON": "pon.vcf.gz",
     "SomaticTNPaired.inFilePONindex": "pon.vcf.gz.tbi",
-    "SomaticTNPaired.inDirPCGRref": "pcgr-data"
+    "SomaticTNPaired.inFileVepRef": "vep-data",
+    "SomaticTNPaired.inDirPcgrRef": "pcgr-data"
 }

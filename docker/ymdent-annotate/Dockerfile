@@ -64,8 +64,9 @@ RUN apt-get update \
     zlib1g-dev \
     libdbi-perl \
     libdbd-mysql-perl \
-    libmysqlclient-dev \
- && cpanm DBI \
+    libmysqlclient-dev
+
+RUN cpanm --force DBI \
  && cpanm Archive::Zip \
  && cpanm DBD::mysql \
  && cpanm Module::Build \

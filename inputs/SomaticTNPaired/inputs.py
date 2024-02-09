@@ -34,10 +34,9 @@ class Main:
         ]
 
         self.inputs['SomaticTNPaired.normalSampleNames'] = normal_names
-        self.inputs['SomaticTNPaired.inFileNormalFastqs'] = normal_fastqs
+        self.inputs['SomaticTNPaired.inFileNormalFastqPairs'] = normal_fastqs
         self.inputs['SomaticTNPaired.tumorSampleNames'] = tumor_names
-        self.inputs['SomaticTNPaired.inFileTumorFastqs'] = tumor_fastqs
-        self.inputs['SomaticTNPaired.finalOutputNames'] = tumor_names
+        self.inputs['SomaticTNPaired.inFileTumorFastqPairs'] = tumor_fastqs
 
         self.inputs['SomaticTNPaired.inFileIntervalBeds'] = self.df['BED File'].tolist()
 
