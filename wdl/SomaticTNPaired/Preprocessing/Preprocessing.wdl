@@ -4,7 +4,7 @@ import "TrimAndMapping.wdl" as trimAndMapping
 import "PostMapping.wdl" as postMapping
 
 
-workflow TNPairedMapping {
+workflow Preprocessing {
     input {
         Array[File] inFileTumorFastqs
         Array[File] inFileNormalFastqs

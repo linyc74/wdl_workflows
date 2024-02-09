@@ -1,9 +1,8 @@
 version 1.0
 
-import "GeneralTask.wdl" as general
-import "Mapping/TNPairedMapping.wdl" as mapper
-import "VariantCalling/TNPairedVariantCalling.wdl" as caller
-import "VariantPicking.wdl" as pick
+import "QCStats.wdl" as qc
+import "Preprocessing/Preprocessing.wdl" as prep
+import "VariantCalling/VariantCalling.wdl" as caller
 import "Annotate.wdl" as annot
 
 
@@ -41,19 +40,7 @@ workflow SomaticTNPaired {
         String normalSampleName = normalSampleNames[i]
         String finalOutputName = finalOutputNames[i]
 
-        call general.FastQC as fastqcTumorFastq {
-            input:
-                inFileFastqR1 = iFTFs[0],
-                inFileFastqR2 = iFTFs[1]
-        }
-
-        call general.FastQC as fastqcNormalFastq {
-            input:
-                inFileFastqR1 = iFNFs[0],
-                inFileFastqR2 = iFNFs[1]
-        }
-
-        call mapper.TNPairedMapping as TNmapping {
+        call prep.Preprocessing as preprocessing {
             input:
                 inFileTumorFastqs = iFTFs,
                 inFileNormalFastqs = iFNFs,
@@ -71,24 +58,24 @@ workflow SomaticTNPaired {
                 normalSampleName = normalSampleName
         }
 
-        call general.BamStats as tumorBamStats {
+        call qc.QCStats as qcstats {
             input:
-                inFileBam = TNmapping.outFileTumorBam,
-                sampleName = tumorSampleName
+                inFileTumorFastqR1 = iFTFs[0],
+                inFileTumorFastqR2 = iFTFs[1],
+                inFileTumorBam = preprocessing.outFileTumorBam,
+                tumorSampleName = tumorSampleName,
+                inFileNormalFastqR1 = iFNFs[0],
+                inFileNormalFastqR2 = iFNFs[1],
+                inFileNormalBam = preprocessing.outFileNormalBam,
+                normalSampleName = normalSampleName
         }
 
-        call general.BamStats as normalBamStats {
+        call caller.VariantCalling as variantCalling {
             input:
-                inFileBam = TNmapping.outFileNormalBam,
-                sampleName = normalSampleName
-        }
-
-        call caller.TNPairedVariantCalling as variantCalling {
-            input:
-                inFileTumorBam = TNmapping.outFileTumorBam,
-                inFileTumorBamIndex = TNmapping.outFileTumorBamIndex,
-                inFileNormalBam = TNmapping.outFileNormalBam,
-                inFileNormalBamIndex = TNmapping.outFileNormalBamIndex,
+                inFileTumorBam = preprocessing.outFileTumorBam,
+                inFileTumorBamIndex = preprocessing.outFileTumorBamIndex,
+                inFileNormalBam = preprocessing.outFileNormalBam,
+                inFileNormalBamIndex = preprocessing.outFileNormalBamIndex,
                 inFileIntervalBed = inFileIntervalBed,
                 inFileGermlineResource = inFileGermlineResource,
                 inFileGermlineResourceIndex = inFileGermlineResourceIndex,
@@ -102,19 +89,10 @@ workflow SomaticTNPaired {
                 sampleName = finalOutputName
         }
 
-        call pick.VariantPicking as variantPicking {
-            input:
-                refFa = refFa,
-                sampleName = finalOutputName,
-                inFileVcfLofreq = variantCalling.outFileLofreqFilteredVcfGz,
-                inFileVcfMutect2 = variantCalling.outFileMutect2FilteredVcfGz,
-                inFileVcfMuse = variantCalling.outFileMuseFilteredVcfGz
-        }
-
         call annot.Annotate as variantAnnotation {
             input:
-                inFileVcfGz = variantPicking.outFileVcfGz,
-                inFileVcfIndex = variantPicking.outFileVcfIndex,
+                inFileVcfGz = variantCalling.outFilePickedVcfGz,
+                inFileVcfIndex = variantCalling.outFilePickedVcfIndex,
                 refFa = refFa,
                 inFileVepRef = inFileVepRef,
                 inDirPcgrRef = inDirPcgrRef,
@@ -124,39 +102,32 @@ workflow SomaticTNPaired {
     }
     
     output {
-        Array[Array[File]] outFileTumorTrimmedFastqs = TNmapping.outFileTumorTrimmedFastqs
-        Array[Array[File]] outFileNormalTrimmedFastqs = TNmapping.outFileNormalTrimmedFastqs
+        Array[Array[File]] outFileTumorTrimmedFastqs = preprocessing.outFileTumorTrimmedFastqs
+        Array[Array[File]] outFileNormalTrimmedFastqs = preprocessing.outFileNormalTrimmedFastqs
 
-        Array[File] outFileTumorFastqcReportTar = fastqcTumorFastq.outFileFastqcReportTar
-        Array[File] outFileNormalFastqcReportTar = fastqcNormalFastq.outFileFastqcReportTar
+        Array[File] outFileTumorBam = preprocessing.outFileTumorBam
+        Array[File] outFileNormalBam = preprocessing.outFileNormalBam
+        Array[File] outFileTumorBamIndex = preprocessing.outFileTumorBamIndex
+        Array[File] outFileNormalBamIndex = preprocessing.outFileNormalBamIndex
 
-        Array[File] outFileTumorBam = TNmapping.outFileTumorBam
-        Array[File] outFileNormalBam = TNmapping.outFileNormalBam
-        Array[File] outFileTumorBamIndex = TNmapping.outFileTumorBamIndex
-        Array[File] outFileNormalBamIndex = TNmapping.outFileNormalBamIndex
+        Array[File] outFileTumorSortedRawBam = preprocessing.outFileTumorSortedRawBam
+        Array[File] outFileNormalSortedRawBam = preprocessing.outFileNormalSortedRawBam
 
-        Array[File] outFileTumorSortedRawBam = TNmapping.outFileTumorSortedRawBam
-        Array[File] outFileNormalSortedRawBam = TNmapping.outFileNormalSortedRawBam
-
-        Array[File] outFileTumorBamStats = tumorBamStats.outFileBamStats
-        Array[File] outFileNormalBamStats = normalBamStats.outFileBamStats
+        Array[File] outFileTumorFastqcReportTar = qcstats.outFileTumorFastqcReportTar
+        Array[File] outFileNormalFastqcReportTar = qcstats.outFileTumorFastqcReportTar
+        Array[File] outFileTumorBamStats = qcstats.outFileTumorBamStats
+        Array[File] outFileNormalBamStats = qcstats.outFileNormalBamStats
 
         Array[File] outFileLofreqFilteredVcfGz = variantCalling.outFileLofreqFilteredVcfGz
-        Array[File] outFileLofreqFilteredVcfIndex = variantCalling.outFileLofreqFilteredVcfIndex
         Array[File] outFileMutect2FilteredVcfGz = variantCalling.outFileMutect2FilteredVcfGz
-        Array[File] outFileMutect2FilteredVcfIndex = variantCalling.outFileMutect2FilteredVcfIndex
         Array[File] outFileMuseFilteredVcfGz = variantCalling.outFileMuseFilteredVcfGz
-        Array[File] outFileMuseFilteredVcfIndex = variantCalling.outFileMuseFilteredVcfIndex
-
-        Array[File] outFilePickedVcfGz = variantPicking.outFileVcfGz
+        Array[File] outFilePickedVcfGz = variantCalling.outFilePickedVcfGz
 
         Array[File] outFileVepVcfGz = variantAnnotation.outFileVepVcfGz
-        Array[File] outFileVepVcfIndex = variantAnnotation.outFileVepVcfIndex
         Array[File] outFileVepMaf = variantAnnotation.outFileVepMaf
         Array[File] outFileVepCsv = variantAnnotation.outFileVepCsv
 
         Array[File] outFilePcgrVcfGz = variantAnnotation.outFilePcgrVcfGz
-        Array[File] outFilePcgrVcfIndex = variantAnnotation.outFilePcgrVcfIndex
         Array[File] outFilePcgrFlexdbHtml = variantAnnotation.outFilePcgrFlexdbHtml
         Array[File] outFilePcgrHtml = variantAnnotation.outFilePcgrHtml
     }

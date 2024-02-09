@@ -3,9 +3,10 @@ version 1.0
 import "Lofreq.wdl" as lofreq
 import "Mutect2.wdl" as mutect2
 import "Muse.wdl" as muse
+import "GeneralTask.wdl" as general
 
 
-workflow TNPairedVariantCalling {
+workflow VariantCalling {
     input {
         File inFileTumorBam
         File inFileTumorBamIndex
@@ -67,6 +68,15 @@ workflow TNPairedVariantCalling {
             sampleName = sampleName
     }
 
+    call general.VariantPicking as variantPicking {
+        input:
+            refFa = refFa,
+            sampleName = tumorSampleName,
+            inFileVcfLofreq = lofreq.outFileFilteredVcfGz,
+            inFileVcfMutect2 = mutect2.outFileFilteredVcfGz,
+            inFileVcfMuse = muse.outFileFilteredVcfGz
+    }
+
     output {
         File outFileLofreqVcfGz = lofreq.outFileVcfGz
         File outFileLofreqVcfIndex = lofreq.outFileVcfIndex
@@ -81,5 +91,8 @@ workflow TNPairedVariantCalling {
         File outFileMuseFilteredVcfIndex = muse.outFileFilteredVcfIndex
         File outFileMutect2FilteredVcfGz = mutect2.outFileFilteredVcfGz
         File outFileMutect2FilteredVcfIndex = mutect2.outFileFilteredVcfIndex
+
+        File outFilePickedVcfGz = variantPicking.outFileVcfGz
+        File outFilePickedVcfIndex = variantPicking.outFileVcfIndex
     }
 }
