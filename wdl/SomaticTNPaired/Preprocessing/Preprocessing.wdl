@@ -8,8 +8,8 @@ workflow Preprocessing {
     input {
         Array[File] inFileTumorFastqPair
         Array[File] inFileNormalFastqPair
-        File inFileDbsnpVcf
-        File inFileDbsnpVcfIndex
+        File refDbsnpVcfGz
+        File refDbsnpVcfIndex
         File refAmb
         File refAnn
         File refBwt
@@ -51,8 +51,8 @@ workflow Preprocessing {
     call postMapping.PostMapping as postMappingTumor {
         input:
             inFileUnSortRawBam = trimAndMapTumor.outFileUnSortRawBam,
-            inFileDbsnpVcf = inFileDbsnpVcf,
-            inFileDbsnpVcfIndex = inFileDbsnpVcfIndex,
+            refDbsnpVcfGz = refDbsnpVcfGz,
+            refDbsnpVcfIndex = refDbsnpVcfIndex,
             refFa = refFa,
             refFai = refFai,
             refDict = refDict,
@@ -62,8 +62,8 @@ workflow Preprocessing {
     call postMapping.PostMapping as postMappingNormal {
         input:
             inFileUnSortRawBam = trimAndMapNormal.outFileUnSortRawBam,
-            inFileDbsnpVcf = inFileDbsnpVcf,
-            inFileDbsnpVcfIndex = inFileDbsnpVcfIndex,
+            refDbsnpVcfGz = refDbsnpVcfGz,
+            refDbsnpVcfIndex = refDbsnpVcfIndex,
             refFa = refFa,
             refFai = refFai,
             refDict = refDict,

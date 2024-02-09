@@ -1,6 +1,6 @@
 version 1.0
 
-import "GeneralTask.wdl" as general
+import "General.wdl" as general
 
 
 workflow Mutect2 {
@@ -9,11 +9,11 @@ workflow Mutect2 {
         File inFileTumorBamIndex
         File? inFileNormalBam
         File? inFileNormalBamIndex
-        File? inFileGermlineResource
-        File? inFileGermlineResourceIndex
-        File? inFilePON
-        File? inFilePONindex
-        File inFileIntervalBed
+        File? refGermlineResourceVcfGz
+        File? refGermlineResourceVcfIndex
+        File? refPonVcfGz
+        File? refPonVcfIndex
+        File refIntervalBed
         File refFa
         File refFai
         File refDict
@@ -29,11 +29,11 @@ workflow Mutect2 {
             inFileTumorBamIndex = inFileTumorBamIndex,
             inFileNormalBam = inFileNormalBam,
             inFileNormalBamIndex = inFileNormalBamIndex,
-            inFileGermlineResource = inFileGermlineResource,
-            inFileGermlineResourceIndex = inFileGermlineResourceIndex,
-            inFilePON = inFilePON,
-            inFilePONindex = inFilePONindex,
-            inFileIntervalBed = inFileIntervalBed,
+            refGermlineResourceVcfGz = refGermlineResourceVcfGz,
+            refGermlineResourceVcfIndex = refGermlineResourceVcfIndex,
+            refPonVcfGz = refPonVcfGz,
+            refPonVcfIndex = refPonVcfIndex,
+            refIntervalBed = refIntervalBed,
             refFa = refFa,
             refFai = refFai,
             refDict = refDict,
@@ -81,11 +81,11 @@ task Mutect2 {
         File inFileTumorBamIndex
         File? inFileNormalBam
         File? inFileNormalBamIndex
-        File? inFileGermlineResource
-        File? inFileGermlineResourceIndex
-        File? inFilePON
-        File? inFilePONindex
-        File inFileIntervalBed
+        File? refGermlineResourceVcfGz
+        File? refGermlineResourceVcfIndex
+        File? refPonVcfGz
+        File? refPonVcfIndex
+        File refIntervalBed
         File refFa
         File refFai
         File refDict
@@ -99,7 +99,7 @@ task Mutect2 {
         set -e -o pipefail
         gatk Mutect2 \
         --reference ~{refFa} \
-        --intervals ~{inFileIntervalBed} \
+        --intervals ~{refIntervalBed} \
         --input ~{inFileTumorBam} \
         ~{"--input " + inFileNormalBam} \
         --tumor-sample ~{tumorSampleName} \
@@ -107,8 +107,8 @@ task Mutect2 {
         --output ~{sampleName}.vcf.gz \
         --f1r2-tar-gz ~{sampleName}_f1r2.tar.gz \
         --max-reads-per-alignment-start 0 \
-        ~{"--germline-resource " + inFileGermlineResource} \
-        ~{"--panel-of-normals " + inFilePON} \
+        ~{"--germline-resource " + refGermlineResourceVcfGz} \
+        ~{"--panel-of-normals " + refPonVcfGz} \
         ~{extraArgs}
     >>>
  

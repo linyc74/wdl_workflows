@@ -3,7 +3,7 @@ version 1.0
 import "Lofreq.wdl" as lofreq
 import "Mutect2.wdl" as mutect2
 import "Muse.wdl" as muse
-import "GeneralTask.wdl" as general
+import "General.wdl" as general
 
 
 workflow VariantCalling {
@@ -12,11 +12,11 @@ workflow VariantCalling {
         File inFileTumorBamIndex
         File inFileNormalBam
         File inFileNormalBamIndex
-        File inFileIntervalBed
-        File inFileGermlineResource
-        File inFileGermlineResourceIndex
-        File? inFilePON
-        File? inFilePONindex
+        File refIntervalBed
+        File refGermlineResourceVcfGz
+        File refGermlineResourceVcfIndex
+        File? refPonVcfGz
+        File? refPonVcfIndex
         File refFa
         File refFai
         File refDict
@@ -30,7 +30,7 @@ workflow VariantCalling {
             inFileTumorBamIndex = inFileTumorBamIndex,
             inFileNormalBam = inFileNormalBam,
             inFileNormalBamIndex = inFileNormalBamIndex,
-            inFileIntervalBed = inFileIntervalBed,
+            refIntervalBed = refIntervalBed,
             refFa = refFa,
             refFai = refFai,
             sampleName = tumorSampleName
@@ -42,11 +42,11 @@ workflow VariantCalling {
             inFileTumorBamIndex = inFileTumorBamIndex,
             inFileNormalBam = inFileNormalBam,
             inFileNormalBamIndex = inFileNormalBamIndex,
-            inFileGermlineResource = inFileGermlineResource,
-            inFileGermlineResourceIndex = inFileGermlineResourceIndex,
-            inFilePON = inFilePON,
-            inFilePONindex = inFilePONindex,
-            inFileIntervalBed = inFileIntervalBed,
+            refGermlineResourceVcfGz = refGermlineResourceVcfGz,
+            refGermlineResourceVcfIndex = refGermlineResourceVcfIndex,
+            refPonVcfGz = refPonVcfGz,
+            refPonVcfIndex = refPonVcfIndex,
+            refIntervalBed = refIntervalBed,
             refFa = refFa,
             refFai = refFai,
             refDict = refDict,

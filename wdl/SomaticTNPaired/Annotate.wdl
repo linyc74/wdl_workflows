@@ -6,8 +6,8 @@ workflow Annotate {
         File inFileVcfGz
         File inFileVcfIndex
         File refFa
-        File inFileVepRef
-        File inDirPcgrRef
+        File refVepTarGz
+        File refPcgrDir
         String tumorSampleName
         String normalSampleName
     }
@@ -17,7 +17,7 @@ workflow Annotate {
             inFileVcfGz = inFileVcfGz,
             inFileVcfIndex = inFileVcfIndex,
             refFa = refFa,
-            inFileVepRef = inFileVepRef,
+            refVepTarGz = refVepTarGz,
             tumorSampleName = tumorSampleName,
             normalSampleName = normalSampleName
     }
@@ -26,7 +26,7 @@ workflow Annotate {
         input:
             inFileVcfGz = inFileVcfGz,
             inFileVcfIndex = inFileVcfIndex,
-            inDirPcgrRef = inDirPcgrRef,
+            refPcgrDir = refPcgrDir,
             sampleName = tumorSampleName
     }
 
@@ -49,14 +49,14 @@ task VEP {
         File inFileVcfGz
         File inFileVcfIndex
         File refFa
-        File inFileVepRef
+        File refVepTarGz
         String tumorSampleName
         String normalSampleName
     }
 
     command <<<
         set -e -o pipefail
-        tar -xvzf ~{inFileVepRef} -C "./vep-cache"
+        tar -xvzf ~{refVepTarGz} -C "./vep-cache"
         vep \
           --offline \
           --input_file ~{inFileVcfGz} \
@@ -102,7 +102,7 @@ task PCGR {
     input {
         File inFileVcfGz
         File inFileVcfIndex
-        File inDirPcgrRef
+        File refPcgrDir
         String sampleName
     }
 
@@ -110,7 +110,7 @@ task PCGR {
         set -e -o pipefail
         pcgr \
         --input_vcf ~{inFileVcfGz} \
-        --pcgr_dir ~{inDirPcgrRef} \
+        --pcgr_dir ~{refPcgrDir} \
         --output_dir pcgr_output \
         --genome_assembly grch38 \
         --vep_buffer_size 30000 \

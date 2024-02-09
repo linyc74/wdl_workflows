@@ -1,6 +1,6 @@
 version 1.0
 
-import "GeneralTask.wdl" as general
+import "General.wdl" as general
 
 
 workflow Muse {

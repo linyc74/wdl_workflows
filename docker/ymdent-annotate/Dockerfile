@@ -48,7 +48,7 @@ RUN mamba create --name pcgr --file ${PCGR_REPO}/pcgr-${PLATFORM}-64.lock && \
     mamba clean --all --force-pkgs-dirs --yes
 
 ARG PCGR_ENV_NAME="pcgr"
-ENV PATH="/opt/mambaforge/envs/${PCGR_ENV_NAME}/bin:${PATH}"
+ENV PATH="${PATH}:/opt/mambaforge/envs/${PCGR_ENV_NAME}/bin"
 ENV CONDA_PREFIX="/opt/mambaforge/envs/${PCGR_ENV_NAME}"
 
 
@@ -66,9 +66,12 @@ RUN apt-get update \
     libdbd-mysql-perl \
     libmysqlclient-dev
 
-RUN cpanm --force DBI \
+COPY netdb.h /usr/include/rpc/netdb.h
+
+# use cpan for DBD:mysql because cpanm does not work
+RUN cpanm DBI \
  && cpanm Archive::Zip \
- && cpanm DBD::mysql \
+ && cpan DBD::mysql \
  && cpanm Module::Build \
  && cpanm --force Bio::Root::Version \
  && cd /opt \
@@ -76,11 +79,11 @@ RUN cpanm --force DBI \
  && cd ensembl-vep \
  && perl INSTALL.pl --AUTO ap --PLUGINS all --NO_UPDATE
 
-ENV PATH="/opt/ensembl-vep:${PATH}"
+ENV PATH="${PATH}:/opt/ensembl-vep"
 
 
 RUN cd /usr/local/seqslab \
-    && wget https://github.com/linyc74/omic/archive/refs/tags/v1.1.0.zip \
-    && unzip v1.1.0.zip \
-    && rm v1.1.0.zip \
-    && mv omic-1.1.0 omic
+ && wget https://github.com/linyc74/omic/archive/refs/tags/v1.1.0.zip \
+ && unzip v1.1.0.zip \
+ && rm v1.1.0.zip \
+ && mv omic-1.1.0 omic

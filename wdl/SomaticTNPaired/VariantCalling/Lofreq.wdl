@@ -1,6 +1,6 @@
 version 1.0
 
-import "GeneralTask.wdl" as general
+import "General.wdl" as general
 
 
 workflow Lofreq {
@@ -9,7 +9,7 @@ workflow Lofreq {
         File inFileTumorBamIndex
         File inFileNormalBam
         File inFileNormalBamIndex
-        File inFileIntervalBed
+        File refIntervalBed
         File refFa
         File refFai
         String sampleName
@@ -21,7 +21,7 @@ workflow Lofreq {
             inFileTumorBamIndex = inFileTumorBamIndex,
             inFileNormalBam = inFileNormalBam,
             inFileNormalBamIndex = inFileNormalBamIndex,
-            inFileIntervalBed = inFileIntervalBed,
+            refIntervalBed = refIntervalBed,
             refFa = refFa,
             refFai = refFai,
             sampleName = sampleName
@@ -59,7 +59,7 @@ task LofreqSomatic {
         File inFileTumorBamIndex
         File inFileNormalBam
         File inFileNormalBamIndex
-        File inFileIntervalBed
+        File refIntervalBed
         File refFa
         File refFai
         String sampleName
@@ -73,7 +73,7 @@ task LofreqSomatic {
         --ref ~{refFa} \
         --threads 1 \
         --call-indels \
-        -l ~{inFileIntervalBed} \
+        -l ~{refIntervalBed} \
         -o ~{sampleName}
     >>>
  

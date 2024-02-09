@@ -10,15 +10,15 @@ workflow SomaticTNPaired {
     input {
         Array[Array[File]] inFileTumorFastqPairs
         Array[Array[File]] inFileNormalFastqPairs
-        Array[File] inFileIntervalBeds
-        File inFileDbsnpVcf
-        File inFileDbsnpVcfIndex
-        File inFileGermlineResource
-        File inFileGermlineResourceIndex
-        File inFilePON
-        File inFilePONindex
-        File inFileVepRef
-        File inDirPcgrRef
+        Array[File] refIntervalBeds
+        File refDbsnpVcfGz
+        File refDbsnpVcfIndex
+        File refGermlineResourceVcfGz
+        File refGermlineResourceVcfIndex
+        File refPonVcfGz
+        File refPonVcfIndex
+        File refVepTarGz
+        File refPcgrDir
         File refAmb
         File refAnn
         File refBwt
@@ -34,7 +34,7 @@ workflow SomaticTNPaired {
     scatter (i in range(length(tumorSampleNames))) {
         Array[File] inFileTumorFastqPair = inFileTumorFastqPairs[i]
         Array[File] inFileNormalFastqPair = inFileNormalFastqPairs[i]
-        File inFileIntervalBed = inFileIntervalBeds[i]
+        File refIntervalBed = refIntervalBeds[i]
         String tumorSampleName = tumorSampleNames[i]
         String normalSampleName = normalSampleNames[i]
 
@@ -42,8 +42,8 @@ workflow SomaticTNPaired {
             input:
                 inFileTumorFastqPair = inFileTumorFastqPair,
                 inFileNormalFastqPair = inFileNormalFastqPair,
-                inFileDbsnpVcf = inFileDbsnpVcf,
-                inFileDbsnpVcfIndex = inFileDbsnpVcfIndex,
+                refDbsnpVcfGz = refDbsnpVcfGz,
+                refDbsnpVcfIndex = refDbsnpVcfIndex,
                 refAmb = refAmb,
                 refAnn = refAnn,
                 refBwt = refBwt,
@@ -72,11 +72,11 @@ workflow SomaticTNPaired {
                 inFileTumorBamIndex = preprocessing.outFileTumorBamIndex,
                 inFileNormalBam = preprocessing.outFileNormalBam,
                 inFileNormalBamIndex = preprocessing.outFileNormalBamIndex,
-                inFileIntervalBed = inFileIntervalBed,
-                inFileGermlineResource = inFileGermlineResource,
-                inFileGermlineResourceIndex = inFileGermlineResourceIndex,
-                inFilePON = inFilePON,
-                inFilePONindex = inFilePONindex,
+                refIntervalBed = refIntervalBed,
+                refGermlineResourceVcfGz = refGermlineResourceVcfGz,
+                refGermlineResourceVcfIndex = refGermlineResourceVcfIndex,
+                refPonVcfGz = refPonVcfGz,
+                refPonVcfIndex = refPonVcfIndex,
                 refFa = refFa,
                 refFai = refFai,
                 refDict = refDict,
@@ -89,8 +89,8 @@ workflow SomaticTNPaired {
                 inFileVcfGz = variantCalling.outFilePickedVcfGz,
                 inFileVcfIndex = variantCalling.outFilePickedVcfIndex,
                 refFa = refFa,
-                inFileVepRef = inFileVepRef,
-                inDirPcgrRef = inDirPcgrRef,
+                refVepTarGz = refVepTarGz,
+                refPcgrDir = refPcgrDir,
                 tumorSampleName = tumorSampleName,
                 normalSampleName = normalSampleName,
         }

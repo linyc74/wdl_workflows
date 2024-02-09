@@ -4,8 +4,8 @@ version 1.0
 workflow PostMapping {
     input {
         File inFileUnSortRawBam
-        File inFileDbsnpVcf
-        File inFileDbsnpVcfIndex
+        File refDbsnpVcfGz
+        File refDbsnpVcfIndex
         File refFa
         File refFai
         File refDict
@@ -28,8 +28,8 @@ workflow PostMapping {
         input:
             inFileBam = MarkDuplicates.outFileBam,
             sampleName = sampleName,
-            inFileDbsnpVcf = inFileDbsnpVcf,
-            inFileDbsnpVcfIndex = inFileDbsnpVcfIndex,
+            refDbsnpVcfGz = refDbsnpVcfGz,
+            refDbsnpVcfIndex = refDbsnpVcfIndex,
             refFa = refFa,
             refFai = refFai,
             refDict = refDict
@@ -102,8 +102,8 @@ task MarkDuplicates {
 
 task BaseRecalibrator {
     input {
-        File inFileDbsnpVcf
-        File inFileDbsnpVcfIndex
+        File refDbsnpVcfGz
+        File refDbsnpVcfIndex
         File inFileBam
         File refFa
         File refFai
@@ -116,7 +116,7 @@ task BaseRecalibrator {
         gatk BaseRecalibrator \
         --input ~{inFileBam} \
         --reference ~{refFa} \
-        --known-sites ~{inFileDbsnpVcf} \
+        --known-sites ~{refDbsnpVcfGz} \
         --output ~{sampleName}.recalibration.table
     >>>
  
