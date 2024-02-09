@@ -12,12 +12,17 @@ workflow Annotate {
         String normalSampleName
     }
 
+    call UnzipVep {
+        input:
+            refVepTarGz = refVepTarGz
+    }
+
     call VEP {
         input:
             inFileVcfGz = inFileVcfGz,
             inFileVcfIndex = inFileVcfIndex,
             refFa = refFa,
-            refVepTarGz = refVepTarGz,
+            refVepCacheDir = UnzipVep.refVepCacheDir,
             tumorSampleName = tumorSampleName,
             normalSampleName = normalSampleName
     }
@@ -44,25 +49,44 @@ workflow Annotate {
 }
 
 
-task VEP {
+task UnzipVep {
     input {
-        File inFileVcfGz
-        File inFileVcfIndex
-        File refFa
         File refVepTarGz
-        String tumorSampleName
-        String normalSampleName
     }
 
     command <<<
         set -e -o pipefail
         mkdir ./vep-cache
         tar -xvzf ~{refVepTarGz} -C "./vep-cache"
+    >>>
+
+    output {
+        File refVepCacheDir = "./vep-cache"
+    }
+
+    runtime {
+        docker: 'nycu:latest'
+    }
+}
+
+
+task VEP {
+    input {
+        File inFileVcfGz
+        File inFileVcfIndex
+        File refFa
+        File refVepCacheDir
+        String tumorSampleName
+        String normalSampleName
+    }
+
+    command <<<
+        set -e -o pipefail
         vep \
           --offline \
           --input_file ~{inFileVcfGz} \
           --fasta ~{refFa} \
-          --dir_cache ./vep-cache \
+          --dir_cache ~{refVepCacheDir} \
           --merged \
           --everything \
           --fork 1 \
