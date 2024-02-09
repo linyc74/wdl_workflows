@@ -18,7 +18,8 @@ workflow SomaticTNPaired {
         File inFileGermlineResourceIndex
         File inFilePON
         File inFilePONindex
-        File inDirPCGRref
+        File inFileVepRef
+        File inDirPcgrRef
         File refAmb
         File refAnn
         File refBwt
@@ -98,8 +99,7 @@ workflow SomaticTNPaired {
                 refDict = refDict,
                 tumorSampleName = tumorSampleName,
                 normalSampleName = normalSampleName,
-                sampleName = finalOutputName,
-                vardictMinimumAF = 0.01
+                sampleName = finalOutputName
         }
 
         call pick.VariantPicking as variantPicking {
@@ -115,8 +115,11 @@ workflow SomaticTNPaired {
             input:
                 inFileVcfGz = variantPicking.outFileVcfGz,
                 inFileVcfIndex = variantPicking.outFileVcfIndex,
-                inDirPCGRref = inDirPCGRref,
-                sampleName = finalOutputName
+                refFa = refFa,
+                inFileVepRef = inFileVepRef,
+                inDirPcgrRef = inDirPcgrRef,
+                tumorSampleName = tumorSampleName,
+                normalSampleName = normalSampleName,
         }
     }
     
@@ -145,13 +148,16 @@ workflow SomaticTNPaired {
         Array[File] outFileMuseFilteredVcfGz = variantCalling.outFileMuseFilteredVcfGz
         Array[File] outFileMuseFilteredVcfIndex = variantCalling.outFileMuseFilteredVcfIndex
 
-        Array[File] outFilePCGRannotatedVcf = variantAnnotation.outFilePCGRannotatedVcf
-        Array[File] outFilePCGRannotatedVcfIndex = variantAnnotation.outFilePCGRannotatedVcfIndex
+        Array[File] outFilePickedVcfGz = variantPicking.outFileVcfGz
 
-        Array[File] outFileMaf = variantAnnotation.outFileMaf
-        Array[File] outFileCsv = variantAnnotation.outFileCsv
+        Array[File] outFileVepVcfGz = variantAnnotation.outFileVepVcfGz
+        Array[File] outFileVepVcfIndex = variantAnnotation.outFileVepVcfIndex
+        Array[File] outFileVepMaf = variantAnnotation.outFileVepMaf
+        Array[File] outFileVepCsv = variantAnnotation.outFileVepCsv
 
-        Array[File] outFilePCGRflexdbHtml = variantAnnotation.outFilePCGRflexdbHtml
-        Array[File] outFilePCGRhtml = variantAnnotation.outFilePCGRhtml
+        Array[File] outFilePcgrVcfGz = variantAnnotation.outFilePcgrVcfGz
+        Array[File] outFilePcgrVcfIndex = variantAnnotation.outFilePcgrVcfIndex
+        Array[File] outFilePcgrFlexdbHtml = variantAnnotation.outFilePcgrFlexdbHtml
+        Array[File] outFilePcgrHtml = variantAnnotation.outFilePcgrHtml
     }
 }

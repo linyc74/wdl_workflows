@@ -17,9 +17,6 @@ task VariantPicking {
         --lofreq ~{inFileVcfLofreq} \
         --mutect2 ~{inFileVcfMutect2} \
         --muse ~{inFileVcfMuse} \
-        --somatic-sniper None \
-        --vardict None \
-        --varscan None \
         --output-vcf ~{sampleName}_picked.vcf \
         --min-snv-caller 1 \
         --min-indel-callers 1
@@ -39,4 +36,3 @@ task VariantPicking {
         docker: 'nycu:latest'
     }
 }
-

@@ -5,68 +5,91 @@ workflow Annotate {
     input {
         File inFileVcfGz
         File inFileVcfIndex
-        File inDirPCGRref
-        String sampleName
+        File refFa
+        File inFileVepRef
+        File inDirPcgrRef
+        String tumorSampleName
+        String normalSampleName
+    }
+
+    call VEP {
+        input:
+            inFileVcfGz = inFileVcfGz,
+            inFileVcfIndex = inFileVcfIndex,
+            refFa = refFa,
+            inFileVepRef = inFileVepRef,
+            tumorSampleName = tumorSampleName,
+            normalSampleName = normalSampleName
     }
 
     call PCGR {
         input:
             inFileVcfGz = inFileVcfGz,
             inFileVcfIndex = inFileVcfIndex,
-            inDirPCGRref = inDirPCGRref,
-            sampleName = sampleName
-    }
-
-    call Vcf2Csv {
-        input:
-            inFileVcfGz = PCGR.outFileVcfGz,
-            sampleName = sampleName
+            inDirPcgrRef = inDirPcgrRef,
+            sampleName = tumorSampleName
     }
 
     output {
-        File outFilePCGRannotatedVcf = PCGR.outFileVcfGz
-        File outFilePCGRannotatedVcfIndex = PCGR.outFileVcfIndex
-        File outFileMaf = PCGR.outFileMaf
-        File outFilePCGRflexdbHtml = PCGR.outFileFlexdbHtml
-        File outFilePCGRhtml = PCGR.outFileHtml
-        File outFileCsv = Vcf2Csv.outFileCsv
+        File outFileVepVcfGz = VEP.outFileVcfGz
+        File outFileVepVcfIndex = VEP.outFileVcfIndex
+        File outFileVepMaf = VEP.outFileMaf
+        File outFileVepCsv = VEP.outFileCsv
+
+        File outFilePcgrVcfGz = PCGR.outFileVcfGz
+        File outFilePcgrVcfIndex = PCGR.outFileVcfIndex
+        File outFilePcgrFlexdbHtml = PCGR.outFileFlexdbHtml
+        File outFilePcgrHtml = PCGR.outFileHtml
     }
 }
 
 
-task PCGR {
+task VEP {
     input {
         File inFileVcfGz
         File inFileVcfIndex
-        File inDirPCGRref
-        String sampleName
+        File refFa
+        File inFileVepRef
+        String tumorSampleName
+        String normalSampleName
     }
 
     command <<<
         set -e -o pipefail
-        pcgr \
-        --input_vcf ~{inFileVcfGz} \
-        --pcgr_dir ~{inDirPCGRref} \
-        --output_dir pcgr_output \
-        --genome_assembly grch38 \
-        --vep_buffer_size 30000 \
-        --sample_id ~{sampleName}
-        zcat pcgr_output/~{sampleName}.pcgr_acmg.grch38.vcf.gz > file_for_vcf2maf.vcf
+        tar -xvzf ~{inFileVepRef} -C "./vep-cache"
+        vep \
+          --offline \
+          --input_file ~{inFileVcfGz} \
+          --fasta ~{refFa} \
+          --dir_cache ./vep-cache \
+          --merged \
+          --everything \
+          --fork 1 \
+          --buffer_size 10000 \
+          --vcf \
+          --output_file ~{tumorSampleName}_vep.vcf
         vcf2maf.pl \
-        --input-vcf file_for_vcf2maf.vcf \
-        --output-maf ~{sampleName}.maf \
-        --tumor-id ~{sampleName} \
-        --inhibit-vep \
-        --ncbi-build GRCh38 \
-        --ref-fasta ~{inDirPCGRref}/data/grch38/.vep/homo_sapiens/105_GRCh38/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+          --input-vcf ~{tumorSampleName}_vep.vcf \
+          --ref-fasta ~{refFa} \
+          --tmp-dir vcf2maf-tmp-dir \
+          --output-maf ~{tumorSampleName}_vep.maf \
+          --tumor-id ~{tumorSampleName} \
+          --normal-id ~{normalSampleName} \
+          --inhibit-vep \
+          --species homo_sapiens \
+          --ncbi-build GRCh38
+        python /usr/local/seqslab/omic vcf2csv \
+          --input-vcf ~{tumorSampleName}_vep.vcf \
+          --output-csv ~{tumorSampleName}_vep.csv
+        bgzip --stdout ~{tumorSampleName}_vep.vcf > ~{tumorSampleName}_vep.vcf.gz
+        tabix --preset vcf ~{tumorSampleName}_vep.vcf.gz
     >>>
 
     output {
-        File outFileVcfGz = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.vcf.gz"
-        File outFileVcfIndex = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.vcf.gz.tbi"
-        File outFileMaf = "~{sampleName}.maf"
-        File outFileFlexdbHtml = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.flexdb.html"
-        File outFileHtml = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.html"
+        File outFileVcfGz = "~{tumorSampleName}_vep.vcf.gz"
+        File outFileVcfIndex = "~{tumorSampleName}_vep.vcf.gz.tbi"
+        File outFileMaf = "~{tumorSampleName}_vep.maf"
+        File outFileCsv = "~{tumorSampleName}_vep.csv"
     }
 
     runtime {
@@ -75,23 +98,30 @@ task PCGR {
 }
 
 
-
-task Vcf2Csv {
-
+task PCGR {
     input {
         File inFileVcfGz
+        File inFileVcfIndex
+        File inDirPcgrRef
         String sampleName
     }
 
     command <<<
         set -e -o pipefail
-        python /usr/local/seqslab/omic vcf2csv \
-        --input-vcf ~{inFileVcfGz} \
-        --output-csv ~{sampleName}.csv
+        pcgr \
+        --input_vcf ~{inFileVcfGz} \
+        --pcgr_dir ~{inDirPcgrRef} \
+        --output_dir pcgr_output \
+        --genome_assembly grch38 \
+        --vep_buffer_size 30000 \
+        --sample_id ~{sampleName}
     >>>
 
     output {
-        File outFileCsv = "~{sampleName}.csv"
+        File outFileVcfGz = "pcgr_output/~{sampleName}_pcgr.vcf.gz"
+        File outFileVcfIndex = "pcgr_output/~{sampleName}_pcgr.vcf.gz.tbi"
+        File outFileFlexdbHtml = "pcgr_output/~{sampleName}_pcgr.flexdb.html"
+        File outFileHtml = "pcgr_output/~{sampleName}_pcgr.grch38.html"
     }
 
     runtime {
