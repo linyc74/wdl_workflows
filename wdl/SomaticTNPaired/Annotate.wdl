@@ -56,6 +56,7 @@ task VEP {
 
     command <<<
         set -e -o pipefail
+        mkdir ./vep-cache
         tar -xvzf ~{refVepTarGz} -C "./vep-cache"
         vep \
           --offline \
