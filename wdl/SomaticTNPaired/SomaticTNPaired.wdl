@@ -17,7 +17,7 @@ workflow SomaticTNPaired {
         File refGermlineResourceVcfIndex
         File refPonVcfGz
         File refPonVcfIndex
-        File refVepTarGz
+        File refVepDir
         File refPcgrDir
         File refAmb
         File refAnn
@@ -89,7 +89,7 @@ workflow SomaticTNPaired {
                 inFileVcfGz = variantCalling.outFilePickedVcfGz,
                 inFileVcfIndex = variantCalling.outFilePickedVcfIndex,
                 refFa = refFa,
-                refVepTarGz = refVepTarGz,
+                refVepDir = refVepDir,
                 refPcgrDir = refPcgrDir,
                 tumorSampleName = tumorSampleName,
                 normalSampleName = normalSampleName,
