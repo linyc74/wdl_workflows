@@ -14,11 +14,18 @@ workflow TrimAndMap {
         String sampleName
     }
 
+    call RemoveUMI {
+        input:
+            inFileFastqR1 = inFileFastqPair[0],
+            inFileFastqR2 = inFileFastqPair[1],
+            sampleName = sampleName
+    }
+
     call TrimGalore {
         input:
             sampleName = sampleName,
-            inFileFastqR1 = inFileFastqPair[0],
-            inFileFastqR2 = inFileFastqPair[1]
+            inFileFastqR1 = RemoveUMI.outFileUmiRemovedFastqR1,
+            inFileFastqR2 = RemoveUMI.outFileUmiRemovedFastqR2
     }
 
     call BwaMemMapping as mapping {
@@ -38,6 +45,35 @@ workflow TrimAndMap {
     output {
         Array[File] outFileTrimmedFastq = TrimGalore.outFileTrimmedFastqs
         File outFileUnSortRawBam = mapping.outFileUnSortRawBam
+    }
+}
+
+
+task RemoveUMI {
+    input {
+        File inFileFastqR1
+        File inFileFastqR2
+        String sampleName
+    }
+
+    command <<<
+        set -e -o pipefail
+        python omic remove-umi \
+        --input-fq1 ~{inFileFastqR1} \
+        --input-fq2 ~{inFileFastqR2} \
+        --output-fq1 ~{sampleName}_umi_removed_R1.fastq.gz \
+        --output-fq2 ~{sampleName}_umi_removed_R2.fastq.gz \
+        --umi-length 0 \
+        --gzip
+    >>>
+
+    runtime {
+        docker: 'nycu:latest'
+    }
+
+    output {
+        File outFileUmiRemovedFastqR1 = "~{sampleName}_umi_removed_R1.fastq.gz"
+        File outFileUmiRemovedFastqR2 = "~{sampleName}_umi_removed_R2.fastq.gz"
     }
 }
 
