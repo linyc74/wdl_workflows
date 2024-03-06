@@ -15,7 +15,7 @@
         ["01_N_R1.fastq.gz", "01_N_R2.fastq.gz"],
         ["02_N_R1.fastq.gz", "02_N_R2.fastq.gz"]
     ],
-    "SomaticTNPaired.inFileIntervalBeds": [
+    "SomaticTNPaired.refIntervalBeds": [
         "SureSelect.bed",
         "KAPA.bed"
     ],
@@ -27,12 +27,13 @@
     "SomaticTNPaired.refBwt": "ref.fa.bwt",
     "SomaticTNPaired.refPac": "ref.fa.pac",
     "SomaticTNPaired.refSa": "ref.fa.sa",
-    "SomaticTNPaired.inFileDbsnpVcf": "dbsnp.vcf.gz",
-    "SomaticTNPaired.inFileDbsnpVcfIndex": "dbsnp.vcf.gz.tbi",
-    "SomaticTNPaired.inFileGermlineResource": "germline-resource.vcf.gz",
-    "SomaticTNPaired.inFileGermlineResourceIndex": "germline-resource.vcf.gz.tbi",
-    "SomaticTNPaired.inFilePON": "pon.vcf.gz",
-    "SomaticTNPaired.inFilePONindex": "pon.vcf.gz.tbi",
-    "SomaticTNPaired.inFileVepRef": "vep_cache",
-    "SomaticTNPaired.inDirPcgrRef": "pcgr_ref"
+    "SomaticTNPaired.refDbsnpVcfGz": "dbsnp.vcf.gz",
+    "SomaticTNPaired.refDbsnpVcfIndex": "dbsnp.vcf.gz.tbi",
+    "SomaticTNPaired.refGermlineResourceVcfGz": "germline-resource.vcf.gz",
+    "SomaticTNPaired.refGermlineResourceVcfIndex": "germline-resource.vcf.gz.tbi",
+    "SomaticTNPaired.refPonVcfGz": "pon.vcf.gz",
+    "SomaticTNPaired.refPonVcfIndex": "pon.vcf.gz.tbi",
+    "SomaticTNPaired.refVepDir": "vep_cache",
+    "SomaticTNPaired.refPcgrDir": "pcgr_ref"
 }
+
