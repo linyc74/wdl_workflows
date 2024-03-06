@@ -30,8 +30,8 @@ workflow TrimAndMap {
 
     call BwaMemMapping as mapping {
         input:
-            inFileFastqR1 = TrimGalore.outFileTrimmedFastqR1,
-            inFileFastqR2 = TrimGalore.outFileTrimmedFastqR2,
+            inFileFastqR1 = TrimGalore.outFileTrimmedFastqPair[0],
+            inFileFastqR2 = TrimGalore.outFileTrimmedFastqPair[1],
             sampleName = sampleName,
             refAmb = refAmb,
             refAnn = refAnn,
@@ -43,7 +43,7 @@ workflow TrimAndMap {
     }
  
     output {
-        Array[File] outFileTrimmedFastq = TrimGalore.outFileTrimmedFastqs
+        Array[File] outFileTrimmedFastq = TrimGalore.outFileTrimmedFastqPair
         File outFileUnSortRawBam = mapping.outFileUnSortRawBam
     }
 }
@@ -107,8 +107,7 @@ task TrimGalore {
     }
 
     output {
-        File outFileTrimmedFastqR1 = "out/~{sampleName}_val_1.fq.gz"
-        File outFileTrimmedFastqR2 = "out/~{sampleName}_val_2.fq.gz"
+        Array[File] outFileTrimmedFastqPair = ["out/~{sampleName}_val_1.fq.gz", "out/~{sampleName}_val_2.fq.gz"]
     }
 }
 
