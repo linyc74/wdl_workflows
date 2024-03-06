@@ -1,7 +1,7 @@
 version 1.0
 
-import "TrimAndMapping.wdl" as trimAndMapping
-import "PostMapping.wdl" as postMapping
+import "TrimAndMap.wdl" as tm
+import "PostMapping.wdl" as pm
 
 
 workflow Preprocessing {
@@ -22,8 +22,9 @@ workflow Preprocessing {
         String normalSampleName
     }
 
-    call trimAndMapping.TrimAndMapping as trimAndMapTumor {
+    call tm.TrimAndMap as trimAndMapTumor {
         input:
+            inFileFastqPair = inFileTumorFastqPair,
             refAmb = refAmb,
             refAnn = refAnn,
             refBwt = refBwt,
@@ -31,12 +32,12 @@ workflow Preprocessing {
             refSa = refSa,
             refFa = refFa,
             refFai = refFai,
-            sampleName = tumorSampleName,
-            inFileFastqs = inFileTumorFastqPair
+            sampleName = tumorSampleName
     }
 
-    call trimAndMapping.TrimAndMapping as trimAndMapNormal {
+    call tm.TrimAndMap as trimAndMapNormal {
         input:
+            inFileFastqPair = inFileNormalFastqPair,
             refAmb = refAmb,
             refAnn = refAnn,
             refBwt = refBwt,
@@ -45,10 +46,9 @@ workflow Preprocessing {
             refFa = refFa,
             refFai = refFai,
             sampleName = normalSampleName,
-            inFileFastqs = inFileNormalFastqPair
     }
 
-    call postMapping.PostMapping as postMappingTumor {
+    call pm.PostMapping as postMappingTumor {
         input:
             inFileUnSortRawBam = trimAndMapTumor.outFileUnSortRawBam,
             refDbsnpVcfGz = refDbsnpVcfGz,
@@ -59,7 +59,7 @@ workflow Preprocessing {
             sampleName = tumorSampleName
     }
 
-    call postMapping.PostMapping as postMappingNormal {
+    call pm.PostMapping as postMappingNormal {
         input:
             inFileUnSortRawBam = trimAndMapNormal.outFileUnSortRawBam,
             refDbsnpVcfGz = refDbsnpVcfGz,

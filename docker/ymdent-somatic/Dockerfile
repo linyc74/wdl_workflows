@@ -95,7 +95,7 @@ RUN cd /usr/local/seqslab \
 
 
 RUN cd /usr/local/seqslab \
-    && wget https://github.com/linyc74/omic/archive/refs/tags/v1.1.0.zip \
-    && unzip v1.1.0.zip \
-    && rm v1.1.0.zip \
-    && mv omic-1.1.0 omic
+    && wget https://github.com/linyc74/omic/archive/refs/tags/v1.2.0.zip \
+    && unzip v1.2.0.zip \
+    && rm v1.2.0.zip \
+    && mv omic-1.2.0 omic
