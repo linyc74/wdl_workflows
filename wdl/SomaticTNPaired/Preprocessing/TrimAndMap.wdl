@@ -58,7 +58,7 @@ task RemoveUMI {
 
     command <<<
         set -e -o pipefail
-        python omic remove-umi \
+        python /usr/local/seqslab/omic remove-umi \
         --input-fq1 ~{inFileFastqR1} \
         --input-fq2 ~{inFileFastqR2} \
         --output-fq1 ~{sampleName}_umi_removed_R1.fastq.gz \
