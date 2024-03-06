@@ -5,7 +5,7 @@ from typing import Dict, Any
 
 class Main:
 
-    TEMPLATE_JSON = 'template.json'
+    TEMPLATE_JSON = f'{__file__[:-3]}.json'
     SAMPLES_CSV = 'samples.csv'
     R1_SUFFIX = '_R1.fastq.gz'
     R2_SUFFIX = '_R2.fastq.gz'

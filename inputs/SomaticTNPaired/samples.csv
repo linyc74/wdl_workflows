@@ -1,4 +1,2 @@
 Normal Sample Name,Tumor Sample Name,BED File
-01N,01T,SureSelect.bed
-02N,02T,SureSelect.bed
-03N,03T,KAPA.bed
+twist_toy_normal,twist_toy_tumor,regions.bed

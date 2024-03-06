@@ -33,6 +33,6 @@
     "SomaticTNPaired.inFileGermlineResourceIndex": "germline-resource.vcf.gz.tbi",
     "SomaticTNPaired.inFilePON": "pon.vcf.gz",
     "SomaticTNPaired.inFilePONindex": "pon.vcf.gz.tbi",
-    "SomaticTNPaired.inFileVepRef": "vep-data",
-    "SomaticTNPaired.inDirPcgrRef": "pcgr-data"
+    "SomaticTNPaired.inFileVepRef": "vep_cache",
+    "SomaticTNPaired.inDirPcgrRef": "pcgr_ref"
 }
