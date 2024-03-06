@@ -7,7 +7,7 @@ task VariantFiltering {
         String sampleName
         String callerName
         String flaggingCriteria = "\"low_depth: DP <= 10\""
-        String removalFlags = "fragment,haplotype,normal_artifact,panel_or_normals,position,slippage,weak_evidence,map_qual,panel_of_normals,base_qual,strand_bias,multiallelic,orientation,contamination,clustered_events,MQ40,QD2,SOR3,MQRankSum-12.5,FS60,FS200,ReadPosRankSum-8,ReadPosRankSum-20,Bias,q22.5,Q10,Cluster0bp"
+        String removalFlags = "base_qual,clustered_events,contamination,fragment,germline,haplotype,map_qual,multiallelic,normal_artifact,orientation,panel_of_normals,position,slippage,strand_bias,weak_evidence,Tier2,Tier3,Tier4,Tier5"
     }
 
     command <<<
