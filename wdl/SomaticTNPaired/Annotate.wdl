@@ -117,10 +117,10 @@ task PCGR {
     >>>
 
     output {
-        File outFileVcfGz = "pcgr_output/~{sampleName}_pcgr.vcf.gz"
-        File outFileVcfIndex = "pcgr_output/~{sampleName}_pcgr.vcf.gz.tbi"
-        File outFileFlexdbHtml = "pcgr_output/~{sampleName}_pcgr.flexdb.html"
-        File outFileHtml = "pcgr_output/~{sampleName}_pcgr.grch38.html"
+        File outFileVcfGz = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.vcf.gz"
+        File outFileVcfIndex = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.vcf.gz.tbi"
+        File outFileFlexdbHtml = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.flexdb.html"
+        File outFileHtml = "pcgr_output/~{sampleName}.pcgr_acmg.grch38.html"
     }
 
     runtime {

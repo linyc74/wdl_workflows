@@ -1,19 +1,19 @@
 {
-    "SomaticTNPaired.tumorSampleNames": [
-        "01_T",
-        "02_T"
+    "SomaticTNPaired.tumorSNames": [
+        "S01_T",
+        "S02_T"
     ],
     "SomaticTNPaired.inFileTumorFastqPairs": [
-        ["01_T_R1.fastq.gz", "01_T_R2.fastq.gz"],
-        ["02_T_R1.fastq.gz", "02_T_R2.fastq.gz"]
+        ["S01_T_R1.fastq.gz", "S01_T_R2.fastq.gz"],
+        ["S02_T_R1.fastq.gz", "S02_T_R2.fastq.gz"]
     ],
-    "SomaticTNPaired.normalSampleNames": [
-        "01_N",
-        "02_N"
+    "SomaticTNPaired.normalSNames": [
+        "S01_N",
+        "S02_N"
     ],
     "SomaticTNPaired.inFileNormalFastqPairs": [
-        ["01_N_R1.fastq.gz", "01_N_R2.fastq.gz"],
-        ["02_N_R1.fastq.gz", "02_N_R2.fastq.gz"]
+        ["S01_N_R1.fastq.gz", "S01_N_R2.fastq.gz"],
+        ["S02_N_R1.fastq.gz", "S02_N_R2.fastq.gz"]
     ],
     "SomaticTNPaired.refIntervalBeds": [
         "SureSelect.bed",
@@ -34,6 +34,6 @@
     "SomaticTNPaired.refPonVcfGz": "pon.vcf.gz",
     "SomaticTNPaired.refPonVcfIndex": "pon.vcf.gz.tbi",
     "SomaticTNPaired.refVepDir": "vep_cache",
-    "SomaticTNPaired.refPcgrDir": "pcgr_ref"
+    "SomaticTNPaired.refPcgrDir": "pcgr_data"
 }
 
